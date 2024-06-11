@@ -1,0 +1,386 @@
+/* @import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&display=swap');
+
+* {
+	font-family: 'Open Sans', sans-serif;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+} */
+
+@import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;1,100&display=swap%27');
+
+* {
+	font-family: 'Poppins', sans-serif;
+	margin: 0;
+	padding: 0;
+	box-sizing: border-box;
+}
+
+:root {
+	--grey: #F1F0F6;
+	--dark-grey: #8D8D8D;
+	--light-grey: #f0eeee;
+	--dark2-grey: #dcdcdc;
+	--light: #f6f6f6;
+	--dark: #000;
+	--green: #81D43A;
+	--light-green: #E3FFCB;
+	--blue: #1775F1;
+	--light-blue: #D0E4FF;
+	--dark-blue: #0C5FCD;
+	--red: #FC3B56;
+}
+
+/* html {
+	overflow-x: hidden;
+} */
+
+body {
+	background: var(--grey);
+	/* overflow-x: hidden; */
+}
+
+a {
+	text-decoration: none;
+}
+
+li {
+	list-style: none;
+}
+
+
+
+
+
+
+
+
+/* CONTENT */
+#content {
+	position: relative;
+	width: calc(100% - 260px);
+	left: 260px;
+	transition: all .3s ease;
+}
+#sidebar.hide + #content {
+	width: calc(100% - 60px);
+	left: 60px;
+}
+
+/* MAIN */
+main {
+	position: relative;
+  	padding-bottom: 40px;
+	min-height: 89vh;
+	min-width: 100%;
+	padding: 24px 20px 60px 20px;
+	/* margin-bottom: 20px; */
+	/* position: relative;
+	z-index: 2; */
+	/* position: absolute;
+	top: 100px; */
+}
+
+/* .bg img { */
+	/* margin-top: 50px; */
+	/* padding: 0px; */
+	/* width: 100%; */
+	/* height: 50%; */
+	/* position: relative; */
+	/* z-index: -1; */
+	/* position: absolute; */
+	/* top: 0px; */
+/* }	 */
+
+.bg img {
+    margin-top: 50px;
+    padding: 0px;
+    min-width: 100%;
+	max-width: 100%;
+    max-height: 100%;
+    z-index: -1;
+    position: absolute;
+    top: 0px;
+}
+
+
+main .title {
+	/* margin-top: 40px; */
+	padding-top: 15px;
+	font-size: 30px;
+	font-weight: 600;
+	margin-bottom: 5px;
+	color: white;
+}
+
+main .greet {
+	font-size: 17px;
+	color: white;
+	/* margin-bottom: 50px; */
+}
+
+main .breadcrumbs {
+	display: flex;
+	align-items: center;
+	grid-gap: 6px;
+}
+main .breadcrumbs li,
+main .breadcrumbs li a {
+	font-size: 14px;
+}
+main .breadcrumbs li a {
+	color: var(--blue);
+}
+main .breadcrumbs li a.active,
+main .breadcrumbs li.divider {
+	color: var(--dark-grey);
+	pointer-events: none;
+}
+main .info-data {
+	/* margin-top: 36px; */
+	display: grid;
+	grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+	grid-gap: 20px;
+	grid-column-start: 1;
+	grid-column-end: 2;
+}
+main .info-data .kartu {
+	padding: 30px;
+	border-radius: 10px;
+	background: var(--light);
+	box-shadow: 4px 4px 16px rgba(0, 0, 0, .1);
+}
+
+main .kartu .head {
+	display: flex;
+	/* justify-content: space-between; */
+	gap: 10px;
+	/* width: 200px; */
+	align-items: center;
+	flex: 1;
+}
+main .kartu .head p {
+	margin-bottom: 20px;
+	/* color: var(--dark); */
+	font-size: 25px;
+	/* font-weight: 600; */
+}
+main .content-data .info p {
+	margin-bottom: 10px;
+	/* color: var(--dark); */
+	font-size: 35px;
+	/* font-weight: 600; */
+}
+/* main .kartu .head p {
+	font-size: 14px;
+} */
+main .kartu .head h6 {
+	margin-bottom: 25px;
+	/* color: var(--dark-blue); */
+}
+main .content-data .info h6 {
+	margin-bottom: 25px;
+	/* color: var(--dark-blue); */
+}
+/* main .card .head .icon {
+	font-size: 20px;
+	color: var(--green);
+}
+main .card .head .icon.down {
+	color: var(--red);
+} */
+
+/* main .info-data .card .progress svg {
+	width: 100%;
+	height: auto;
+  } */
+/* main .card .progress {
+	display: block;
+	margin-top: 24px;
+	height: 10px;
+	width: 100%;
+	border-radius: 10px;
+	background: var(--grey);
+	overflow-y: hidden;
+	position: relative;
+	margin-bottom: 4px;
+}
+main .card .progress::before {
+	content: '';
+	position: absolute;
+	top: 0;
+	left: 0;
+	height: 100%;
+	background: var(--blue);
+	width: var(--value);
+} */
+
+main .data .box-container {
+	display: grid;
+	grid-template-rows: repeat(auto-fit, minmax(100px, 1fr));
+	grid-gap: 20px;
+}
+
+main .data .box-container2 {
+	grid-column-start: 2;
+	grid-row-start: 1;
+	grid-row-end: 4;
+	display: grid;
+	grid-template-rows: repeat(auto-fit, minmax(300px, 1fr));
+	grid-gap: 20px;
+}
+main .data .box-container3 {
+	grid-column-start: 1;
+	grid-column-end: 2;
+	display: grid;
+	grid-template-rows: repeat(auto-fit, minmax(300px, 1fr));
+	grid-gap: 20px;
+}
+
+
+
+main .kartu .label {
+	font-size: 14px;
+	font-weight: 700;
+}
+
+main .data {
+	display: grid;
+	/* flex-direction: row; */
+	/* grid-template-rows: repeat(auto-fit, minmax(300px, 1fr)); */
+	grid-gap: 20px;
+	grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+	margin-top: 30px;
+	/* flex-wrap: nowrap; */
+}
+main .data .content-data {
+	flex-grow: 1;
+	flex-basis: 400px;
+	padding: 30px;
+	background: var(--light);
+	border-radius: 10px;
+	box-shadow: 4px 4px 16px rgba(0, 0, 0, .1);
+}
+
+main .data .atur-akun {
+	width: 200;
+}
+
+main .content-data .head {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 24px;
+	margin-top: 20px;
+}
+
+main .content-data .head h4 {
+	/* font-size: 25px; */
+	text-align: center;
+	flex: 1;
+	/* color: var(--dark-blue); */
+	/* justify-content: center; */
+	/* font-weight: 600; */
+	
+}
+
+main .content-data .head .menu i {
+	visibility: hidden;
+}
+
+main .content-data .head .menu {
+	position: relative;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+main .content-data .head .menu .icon {
+	cursor: pointer;
+}
+
+main .content-data .head .menu-link {
+	position: absolute;
+	top: calc(100% + 10px);
+	right: 0;
+	width: 140px;
+	background: var(--light);
+	border-radius: 10px;
+	box-shadow: 4px 4px 16px rgba(0, 0, 0, .1);
+	padding: 10px 0;
+	z-index: 100;
+	opacity: 0;
+	pointer-events: none;
+	transition: all .3s ease;
+}
+main .content-data .head .menu-link.show {
+	top: 100%;
+	opacity: 1;
+	pointer-events: visible;
+}
+main .content-data .head .menu-link a {
+	display: block;
+	padding: 6px 16px;
+	font-size: 14px;
+	color: var(--dark);
+	transition: all .3s ease;
+}
+main .content-data .head .menu-link a:hover {
+	background: var(--grey);
+}
+main .content-data .chart {
+	width: 100%;
+	max-width: 100%;
+	overflow-x: auto;
+	scrollbar-width: none;
+}
+main .content-data .chart::-webkit-scrollbar {
+	display: none;
+}
+
+
+/* MAIN */
+/* CONTENT */
+
+
+
+@media screen and (max-width: 900px) {
+	#content {
+		position: relative;
+		width: calc(100% - 60px);
+		transition: all .3s ease;
+	}
+	nav .nav-link,
+	nav .divider {
+		display: none;
+	}
+}
+
+@media print {
+    body * {
+        visibility:hidden; 
+
+    }
+	
+    .print-section,
+    .print-section * {
+        /* display: block !important; */
+		visibility: visible;
+		color: black;
+    }
+    .print-section {
+		/* display: block !important; */
+        left: 0;
+        top: 0;
+    }
+	table {
+		overflow: visible;
+	}
+	
+	/* Atau untuk setiap elemen yang perlu diatur */
+	th, td {
+		overflow: visible;
+	}
+}
+
+

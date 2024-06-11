@@ -1,0 +1,581 @@
+/* recent order */
+.detail {
+	position: relative;
+	width: 100%;
+	/* padding: 20px; */
+	display: grid;
+	/* grid-template-columns: 2fr 1fr; */
+	grid-gap: 0px;
+	/* margin-top: 10px; */
+  }
+  
+  .detail .recentOrders {
+	position: relative;
+	/* display: grid; */
+	min-height: 400px;
+	background: var(--light);
+	padding: 30px;
+	box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+	border-radius: 10px;
+  }
+  
+  /* .detail .cardHeader {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+  } */
+
+  .cardHeader h3 {
+	font-weight: 600;
+	color: var(--blue);
+	font-size: 28px;
+  }
+
+  .cardHeader .breadcrumb {
+	margin: 0px;
+	font-size: 17px;
+  }
+
+  .cardHeader .btr {
+	position: relative;
+	/* padding: 5px 10px; */
+	text-decoration: none;
+	color: var(--white);
+  }
+  
+  .detail table {
+	width: 100%;
+	border-collapse: collapse;
+	margin-top: 10px;
+	/* overflow: scroll; */
+  }
+.filterBox .table {
+	overflow: scroll;
+	white-space: nowrap;
+  }
+  .detail table thead td {
+	font-weight: 600;
+	background-color: var(--light-blue);
+  }
+  .detail .recentOrders table tr {
+	color: var(--black1);
+	border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  }
+  /* .detail .recentOrders table tr:last-child { */
+	/* border-bottom: none; */
+	/* background-color: var(--grey); */
+	/* border-bottom: 1px solid rgba(0, 0, 0, 1); */
+  /* } */
+
+  .detail .recentOrders table tbody tr:hover {
+	border-radius: 20px;
+	background: var(--dark2-grey);
+	color: var(--white);
+  }
+  .detail .recentOrders{
+	/* padding: 15px; */
+	white-space: wrap;
+  }
+  .detail .recentOrders table tr td {
+	padding: 15px;
+  }
+  .detail .recentOrders .modal-body table tr td {
+	padding: 5px 5px 5px 20px;
+	font-size: 16px;
+  }
+  .detail .recentOrders .modal-body{
+	width: 100%;
+	overflow-x: auto;
+  }
+  .detail .recentOrders .modal-body table tr th {
+	padding: 5px 20px 5px 20px;
+	width: 112px;
+	font-size: 16px;
+  }
+  .detail .recentOrders table tr td ul {
+	display: flex;
+	margin: 0px;
+	/* justify-content: space-between; */
+  }
+  .detail .recentOrders a .icon-opsi {
+	display: flex;
+	align-items: center;
+	font-size: 20px;
+	color: var(--blue);
+	/* padding: 12px 16px 12px 0; */
+	transition: all .3s ease;
+	border-radius: 10px;
+	margin: 4px 10px 4px 0;
+	white-space: nowrap;
+	text-align: end;
+	}
+  .detail .recentOrders table tr td:last-child {
+	text-align: start;
+  }
+  .detail .recentOrders table tr td:nth-child(2) {
+	text-align: start;
+  }
+  .detail .recentOrders table tr td:nth-child(3) {
+	text-align: start;
+  }
+  .detail .recentOrders table tr:nth-child(odd) {
+	background-color: var(--light-grey);
+  }
+
+  .status.delivered {
+	padding: 2px 4px;
+	background: #8de02c;
+	color: var(--white);
+	border-radius: 4px;
+	font-size: 14px;
+	font-weight: 500;
+  }
+  .status.pending {
+	padding: 2px 4px;
+	background: #e9b10a;
+	color: var(--white);
+	border-radius: 4px;
+	font-size: 14px;
+	font-weight: 500;
+  }
+  .status.return {
+	padding: 2px 4px;
+	background: #f00;
+	color: var(--white);
+	border-radius: 4px;
+	font-size: 14px;
+	font-weight: 500;
+  }
+  .status.inProgress {
+	padding: 2px 4px;
+	background: #1795ce;
+	color: var(--white);
+	border-radius: 4px;
+	font-size: 14px;
+	font-weight: 500;
+  }
+  
+  .recentCustomers {
+	position: relative;
+	display: grid;
+	min-height: 500px;
+	padding: 20px;
+	background: var(--white);
+	box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+	border-radius: 20px;
+  }
+  .recentCustomers .imgBx {
+	position: relative;
+	width: 40px;
+	height: 40px;
+	border-radius: 50px;
+	overflow: hidden;
+  }
+  .recentCustomers .imgBx img {
+	position: absolute;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	object-fit: cover;
+  }
+  .recentCustomers table tr td {
+	padding: 12px 10px;
+  }
+  .recentCustomers table tr td h4 {
+	font-size: 16px;
+	font-weight: 500;
+	line-height: 1.2rem;
+  }
+  .recentCustomers table tr td h4 span {
+	font-size: 14px;
+	color: var(--black2);
+  }
+  .recentCustomers table tr:hover {
+	background: var(--blue);
+	color: var(--white);
+	border-radius: 10px;
+  }
+  .recentCustomers table tr:hover td h4 span {
+	color: var(--white);
+  }
+
+
+
+  .recentCustomers table tr td ul {
+	display: inline;
+	
+
+	/* justify-content: center; */
+	/* align-items: center; */
+  }
+
+  /* ===========button============== */
+
+  .pencarian {
+	display: flex;
+	justify-content: flex-end;
+	height: 60px;
+	gap: 10px;
+  }
+
+  button {
+	/* color: var(--white); */
+	color: white;
+	padding: 8px 22px;
+	border-radius: 6px;
+	border: none;
+	background: var(--blue);
+	transition: all 0.2s ease;
+	margin: 10px 0px 10px;
+  }
+
+  button:active {
+	transform: scale(0.96);
+  }
+
+  /*==============search bar table============*/
+  /* .pencarian form {
+	max-width: 400px;
+	width: 100%;
+	margin-right: auto;
+	display: flex;
+	justify-content: center;
+	margin-right: 10px;
+	} */
+	
+	.pencarian .form-group {
+		position: relative;
+		justify-content: center;
+	}
+	.pencarian .form-group input {
+		width: 100%;
+		background: var(--grey);
+		border-radius: 5px;
+		border: none;
+		outline: none;
+		/* padding: 10px 36px 10px 16px; */
+		padding: 8px 22px;
+		transition: all .3s ease;
+		margin-top: 10px;
+		margin-right: 10px;
+		/* align-items: center; */
+		display: flex;
+		justify-content: center;
+	}
+	.pencarian .form-group input:focus {
+		box-shadow: 0 0 0 1px var(--blue), 0 0 0 4px var(--light-blue);
+	}
+	.filterBox .form-group input:focus {
+		box-shadow: 0 0 0 1px var(--blue), 0 0 0 4px var(--light-blue);
+	}
+	.pencarian .form-group .icon {
+		position: absolute;
+		top: 50%;
+		transform: translateY(-50%);
+		right: 16px;
+		color: var(--dark-grey);
+	}
+	.pencarian .nav-link {
+		position: relative;
+	}
+	.pencarian .nav-link .icon {
+		font-size: 18px;
+		color: var(--dark);
+	}
+
+/* ============ SELECT NUMBER =========== */
+.select-number{
+    width: 60px;
+    /* margin: 140px auto; */
+	display: flex;
+	align-items: center;
+	/* justify-content: flex-start; */
+	margin-right: 650px;
+}
+.select-number .select-btn{
+    display: flex;
+	justify-content: flex-start;
+    height: 35px;
+    background: #fff;
+    padding: 8px;
+    font-size: 18px;
+    font-weight: 400;
+    border-radius: 8px;
+    align-items: center;
+    cursor: pointer;
+    /* justify-content: space-between; */
+    box-shadow: 0 0 5px rgba(0,0,0,0.1);
+	justify-content: space-between;
+
+}
+.select-btn i{
+    font-size: 25px;
+    transition: 0.3s;
+}
+.select-number.active .select-btn i{
+    transform: rotate(-180deg);
+}
+.select-number .options{
+    position: relative;
+    padding: 15px;
+    margin-top: 10px;
+    border-radius: 8px;
+    background: #fff;
+    box-shadow: 0 0 3px rgba(0,0,0,0.1);
+    display: none;
+}
+.select-number.active .options{
+    display: block;
+}
+.options .option{
+    display: flex;
+    height: 40px;
+    cursor: pointer;
+    padding: 0 10px;
+    border-radius: 8px;
+    align-items: center;
+    background: #fff;
+}
+.options .option:hover{
+    background: #F2F2F2;
+}
+.option i{
+    font-size: 25px;
+    margin-right: 12px;
+}
+.option .option-text{
+    font-size: 18px;
+    color: #333;
+}
+
+/* PADA TAMBAH DATA */
+/* Ganti warna border input menjadi biru */
+.form-control {
+	/* border-color: var(--blue); */
+	border: 1px solid #aaa;
+  }
+/* .filterBox .form-control {
+	border-color: var(--blue) !important; 
+  } */
+
+.form-select {
+	/* border-color: var(--blue); */
+	border: 1px solid #aaa;
+  }
+
+/*================ CONTAINER FILTER ===============*/
+.detail .recentOrders .filterBox {
+	position: relative;
+	/* display: grid; */
+	/* min-height: 400px; */
+	background: var(--light);
+	padding: 20px;
+	margin: 20px auto;
+	box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+	border-radius: 10px;
+	border: 1px solid var(--blue);
+	width: 600px;
+  }
+.detail .recentOrders .AddSpopBox {
+	position: relative;
+	/* display: grid; */
+	/* min-height: 400px; */
+	background: var(--light);
+	padding: 20px;
+	margin: 20px auto;
+	box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+	border-radius: 10px;
+	border: 1px solid var(--blue);
+	min-width: 100%;
+	/* width: 600px; */
+  }
+.detail .recentOrders .DetailSpopBox {
+	position: relative;
+	/* display: grid; */
+	/* min-height: 400px; */
+	background: var(--light);
+	padding: 20px;
+	margin: 5px auto 20px;
+	border-radius: 10px;
+	border: 1px solid var(--blue);
+	min-width: 100%;
+	/* width: 600px; */
+  }
+.detail .recentOrders .dataBox {
+	position: relative;
+	/* display: grid; */
+	/* min-height: 400px; */
+
+	/* max-width: 1150px; */
+	background: var(--light);
+	padding: 20px;
+	/* margin: 10px; */
+	box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08);
+	border-radius: 10px;
+  }
+.detail .recentOrders .BoxUtama {
+	position: relative;
+	/* display: grid; */
+	/* min-height: 400px; */
+	background: var(--light);
+	/* padding: 20px;
+	margin: 20px; */
+	/* box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08); */
+	border-radius: 10px;
+	display: flex;
+  }
+.detail .recentOrders .Box1 {
+	position: relative;
+	/* display: grid; */
+	/* min-height: 400px; */
+	background: var(--light);
+	padding: 10px;
+	/* margin: 20px; */
+	/* box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08); */
+	border-radius: 10px;
+	flex: 1;
+  }
+.detail .recentOrders .Box2 {
+	position: relative;
+	/* display: grid; */
+	/* min-height: 400px; */
+	background: var(--light);
+	padding: 10px;
+	/* margin: 20px; */
+	/* box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08); */
+	border-radius: 10px;
+	flex: 1;
+  }
+.detail .recentOrders .Box3 {
+	position: relative;
+	/* display: grid; */
+	/* min-height: 400px; */
+	background: var(--light);
+	padding: 10px;
+	/* margin: 20px; */
+	/* box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08); */
+	border-radius: 10px;
+	flex: 1;
+  }
+.detail .recentOrders .dataTable {
+	position: relative;
+	/* display: grid; */
+	/* min-height: 400px; */
+	background: var(--light);
+	/* padding: 0 10px 10px 10px; */
+	/* margin: 20px; */
+	/* box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08); */
+	border-radius: 10px;
+	flex: 1;
+  }
+.detail .recentOrders .dataTable2 {
+	position: relative;
+	/* display: grid; */
+	/* min-height: 400px; */
+	/* max-width: 1150px; */
+	background: var(--light);
+	/* padding: 0 10px 10px 10px; */
+	/* margin: 20px; */
+	/* box-shadow: 0 7px 25px rgba(0, 0, 0, 0.08); */
+	border-radius: 10px;
+	flex: 1;
+  }
+
+.dataTable table{
+	
+}
+/* .dataTable2 table{
+	 white-space: nowrap; 
+} */
+
+
+/*============= TABLE DETAIL DATA =============*/
+.custom-table tr:hover td {
+    background-color: #f5f5f5;
+}
+
+.custom-table {
+    border-radius: 10px; /* Sesuaikan nilai border radius sesuai keinginan Anda */
+}
+.border-bottom {
+    border-bottom-color: #1795ce; /* Sesuaikan nilai border radius sesuai keinginan Anda */
+}
+
+.custom-table tr {
+	margin: 10px;
+	border-bottom: none !important;
+}
+.custom-table th {
+	margin: 10px;
+	margin-top: 10px;
+	padding-left: 20px;
+}
+
+.table-detail {
+	padding: 50px 100px;
+	/* display: flex;
+	flex-direction: column;
+	align-items: center;
+	justify-content: center; */
+}
+
+.border-top-right{
+	border-top-right-radius: 10px;	
+}
+.border-bottom-right{
+	border-bottom-right-radius: 10px;	
+}
+.border-top-left{
+	border-top-left-radius: 10px;	
+}
+.border-bottom-left{
+	border-bottom-left-radius: 10px;	
+}
+
+    /* Tambahkan margin untuk tabel */
+#example {
+    margin-bottom: 20px; /* Sesuaikan dengan margin yang diinginkan */
+}
+
+
+/* CSS untuk memposisikan label setelah input dengan ikon kalender */
+.form-floating > .input-group > .datepicker_input + .input-group-text + label {
+    padding-left: 3.5rem;
+    z-index: 3;
+}
+
+
+#JenisPelayanan {
+	max-height: 150px; /* Ganti dengan tinggi maksimum yang diinginkan */
+    overflow-y: auto !important;
+}
+
+.list-inline-item a.active i.bx.bx-show {
+	color: rgb(6, 50, 182);
+  }
+.list-inline-item a.active i.bx.bx-trash {
+	color: rgb(182, 6, 6);
+  }
+.list-inline-item a i.bx.bx-trash {
+	color: rgb(182, 6, 6);
+  }
+.list-inline-item a.active i.bx.bxs-edit {
+	color: rgb(90, 2, 122);
+  }
+.bx.bxs-edit {
+	color: rgb(90, 2, 122);
+  }
+
+
+  .modal-dialog {
+    max-width: 600px; /* Hapus batasan lebar maksimum */
+  }
+
+  .modal-3 {
+    max-width: 800px; /* Hapus batasan lebar maksimum */
+  }
+
+  .modal-content {
+    width: 100%; /* Pastikan konten modal mengisi lebar modal */
+  }
