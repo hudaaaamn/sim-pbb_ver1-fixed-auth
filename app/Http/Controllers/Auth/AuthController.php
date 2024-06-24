@@ -7,9 +7,10 @@ use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
-use App\Mail\SendEmail;
-use App\Jobs\SendMailJob;
+use Exception;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Validation\ValidationException;
 
 class AuthController extends Controller
 {
@@ -20,6 +21,57 @@ class AuthController extends Controller
         );
     }
     //hanya logout dan dashboard yang dapat diakses setelah login
+
+    public function apiLogin(Request $request)
+    {
+        try {
+            $request->validate([
+                'username' => 'required|exists:users,username|string',
+                'password' => 'required|string|min:8',
+            ]);
+
+            $user = User::where('username', $request->username)->first();
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                return response()->json([
+                    'success' => false,
+                    'message' => "Invalid login details"
+                ], 401);
+            }
+
+            $token = $user->createToken('auth_token')->plainTextToken;
+            return response()->json([
+                'success' => true,
+                'access_token' => $token,
+            ], 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->errors(),
+            ], 422); // 422 Unprocessable Entity untuk kesalahan validasi
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => "Internal Server Error",
+            ], 500);
+        }
+    }
+
+
+    public function apiLogout(Request $request)
+    {
+        try {
+            $username = $request->user()->username;
+            $request->user()->currentAccessToken()->delete();
+            return response()->json([
+                "username" => $username,
+                "status" => "Berhasil Logout"
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                "error" => $e
+            ]);
+        }
+    }
 
     public function register()
     {
@@ -46,8 +98,6 @@ class AuthController extends Controller
 
         $request->session()->regenerate(); //mengatur ulang session
         return redirect()->route('dashboard')->withSuccess('You have successfully registered & logged in!'); //redirect ke halaman dashboard
-
-
 
     }
 

@@ -5,11 +5,72 @@ namespace App\Http\Controllers;
 use App\Models\DatOpBangunan;
 use Illuminate\Http\Request;
 use App\Models\Lspop;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Http;
 
 class LspopController extends Controller
 {
+
+    public function apiStore(Request $request)
+    {
+        try {
+            $request->validate([
+                'nop' => 'required',
+                'tgl_kunjungan_kembali' => 'required',
+                'jenis_transaksi' => 'required',
+                'nomor_formulir' => 'required',
+                'bgn_total' => 'required',
+                'bgn_tgl_pendataan' => 'required',
+                'bgn_individual' => 'required',
+                'bgn_nip_pendata' => 'required',
+                'bgn_luas' => 'required',
+                'bgn_kontruksi' => 'required',
+                'bgn_dinding' => 'required',
+                'bgn_jml_lantai' => 'required',
+                'bgn_langit_langit' => 'required',
+                'bgn_lantai' => 'required',
+                'bgn_kondisi' => 'required',
+                'bgn_atap' => 'required',
+                'bgn_listrik' => 'required'
+            ]);
+
+            $lspop = Lspop::create($request->all());
+            return response()->json([
+                'success' => true,
+                'data' => $lspop
+            ], 201);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => "Internal Sever Error" . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function apiShow($nop)
+    {
+        try {
+            $lspop = Lspop::where('nop', $nop)->firstOrFail();
+            return response()->json([
+                'success' => true,
+                'data' => $lspop
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'error' => "Data SPOP tidak ditemukan",
+            ], 404);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => "Internal Server Error" . $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function index()
     {
         $data_user = DB::table('users');
@@ -17,37 +78,40 @@ class LspopController extends Controller
         $fullname = $user->fullname;
         $username = $user->username;
 
+        //Versi Anisa
         // Eksekusi query SQL menggunakan metode DB
-        $data_lspop = DB::table('db_simpbb.lspop')
-            ->join('berhak_njoptkp', function ($join) {
-                $join->on('db_simpbb.lspop.KD_PROPINSI', '=', 'berhak_njoptkp.KD_PROPINSI')
-                    ->on('db_simpbb.lspop.KD_DATI2', '=', 'berhak_njoptkp.KD_DATI2')
-                    ->on('db_simpbb.lspop.KD_KECAMATAN', '=', 'berhak_njoptkp.KD_KECAMATAN')
-                    ->on('db_simpbb.lspop.KD_KELURAHAN', '=', 'berhak_njoptkp.KD_KELURAHAN')
-                    ->on('db_simpbb.lspop.KD_BLOK', '=', 'berhak_njoptkp.KD_BLOK')
-                    ->on('db_simpbb.lspop.NO_URUT', '=', 'berhak_njoptkp.NO_URUT')
-                    ->on('db_simpbb.lspop.KD_JNS_OP', '=', 'berhak_njoptkp.KD_JNS_OP');
-            })
-            ->select('db_simpbb.lspop.*', 'berhak_njoptkp.nop')
-            ->paginate(25);
-
+        // $data_lspop = DB::table('db_simpbb.lspop')
+        //     ->join('berhak_njoptkp', function ($join) {
+        //         $join->on('db_simpbb.lspop.KD_PROPINSI', '=', 'berhak_njoptkp.KD_PROPINSI')
+        //             ->on('db_simpbb.lspop.KD_DATI2', '=', 'berhak_njoptkp.KD_DATI2')
+        //             ->on('db_simpbb.lspop.KD_KECAMATAN', '=', 'berhak_njoptkp.KD_KECAMATAN')
+        //             ->on('db_simpbb.lspop.KD_KELURAHAN', '=', 'berhak_njoptkp.KD_KELURAHAN')
+        //             ->on('db_simpbb.lspop.KD_BLOK', '=', 'berhak_njoptkp.KD_BLOK')
+        //             ->on('db_simpbb.lspop.NO_URUT', '=', 'berhak_njoptkp.NO_URUT')
+        //             ->on('db_simpbb.lspop.KD_JNS_OP', '=', 'berhak_njoptkp.KD_JNS_OP');
+        //     })
+        //     ->select('db_simpbb.lspop.*', 'berhak_njoptkp.nop')
+        //     ->paginate(25);
 
         // Menghitung nomor awal data yang ditampilkan pada halaman
-        $no = ($data_lspop->currentPage() - 1) * $data_lspop->perPage() + 1;
+        // $no = ($data_lspop->currentPage() - 1) * $data_lspop->perPage() + 1;
 
-        return view('lspop.lspop', compact('data_lspop', 'no', 'fullname', 'username'));
+        //Versi Verlino Nantinya
+
+        // return view('lspop.lspop', compact('data_lspop', 'no', 'fullname', 'username'));
+        return view('lspop.lspop', compact('fullname', 'username'));
     }
 
     public function data(Request $request)
     {
         $perPage = $request->input('length', 25);
         $page = $request->input('start', 0) / $perPage + 1;
-    
+
         $query = DB::table('db_simpbb.lspop');
-    
+
         // Apply additional filters or conditions based on DataTables request
         // Example: if ($request->has('some_column')) $query->where('some_column', $request->input('some_column'));
-    
+
         // Handle global search
         if ($request->filled('search.value')) {
             $searchValue = $request->input('search.value');
@@ -59,14 +123,14 @@ class LspopController extends Controller
                     ->orWhere('lspop.JML_LANTAI_BNG', 'like', "%$searchValue%");
             });
         }
-    
+
         $lspops = $query->paginate($perPage, ['*'], 'page', $page);
-    
+
         foreach ($lspops->items() as $index => $lspop) {
             $lspop->DT_RowIndex = $index + 1 + ($page - 1) * $perPage;
             $lspop->nop = $lspop->KD_PROPINSI . $lspop->KD_DATI2 . $lspop->KD_KECAMATAN . $lspop->KD_KELURAHAN . $lspop->KD_BLOK . $lspop->NO_URUT . $lspop->KD_JNS_OP;
         }
-    
+
         // Build the JSON response explicitly
         $jsonResponse = [
             'data' => $lspops->items(),
@@ -74,7 +138,7 @@ class LspopController extends Controller
             'recordsTotal' => $lspops->total(),
             'recordsFiltered' => $lspops->total(),
         ];
-    
+
         return response()->json($jsonResponse);
     }
 
@@ -86,6 +150,7 @@ class LspopController extends Controller
         $username = $user->username;
         return view('lspop.add_lspop', compact('fullname', 'username'));
     }
+
     public function store(Request $request)
     {
         $request->validate([
@@ -121,7 +186,7 @@ class LspopController extends Controller
             'NilaiIndividu' => 'required|integer',
             'Aktif' => 'required|boolean',
         ]);
-        
+
 
 
         $lspop = new DatOpBangunan();
@@ -222,9 +287,9 @@ class LspopController extends Controller
             'lspop.KD_BLOK' => $KD_BLOK,
             'lspop.NO_URUT' => $NO_URUT,
             'lspop.KD_JNS_OP' => $KD_JNS_OP,
-        ])        ->first();
+        ])->first();
 
-        
+
 
         // Return the view with the user and Kelurahan data
         return view('lspop.detail_llspop', compact('fullname', 'username', 'data_lspop', 'lspop'));

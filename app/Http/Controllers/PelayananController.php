@@ -14,71 +14,147 @@ use Illuminate\Support\Facades\Log;
 use Carbon\Carbon;
 use App\Exports\PelayananExport;
 use App\Models\RefJnsPelayanan;
+use Exception;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\Facades\Http;
+use Illuminate\Validation\ValidationException;
 use Maatwebsite\Excel\Facades\Excel;
 
 
 class PelayananController extends Controller
-
-
 {
     /**
      * Display a listing of the resource.
      */
-    // public function index()
-    // {
+    public function apiIndex()
+    {
+        try {
+            $perPage = request()->query('per_page', 10);
+            $data = Pelayanan::select("ID", "NO_PELAYANAN", "NAMA_PEMOHON", "TANGGAL_PELAYANAN", "KD_JNS_PELAYANAN", "KECAMATAN", "KELURAHAN", "KD_BLOK", "NO_URUT", "STATUS_PELAYANAN", "KETERANGAN_BERKAS")->paginate($perPage);
 
-    //     $data_user = DB::table('users');
-    //     $user = $data_user->where('id', Auth()->user()->id)->first();
-    //     $fullname = $user->fullname;
-    //     $username = $user->username;
+            return response()->json([
+                'success' => true,
+                'data' => $data
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        }
+    }
 
-    //     $searchModel = new PelayananSearch();
-    //     $status = StatusPelayanan::orderBy('urutan')->pluck('nama', 'id')->toArray();
+    public function apiStore(Request $request)
+    {
+        try {
+            $request->validate([
+                'NO_PELAYANAN' => 'required',
+                'KD_DATI2' => 'required',
+                'KD_JNS_PELAYANAN' => 'required',
+                'NAMA_PEMOHON' => 'required',
+                'ALAMAT_PEMOHON' => 'required',
+                'NOP' => 'required',
+                'KETERANGAN' => 'required',
+                'LETAK_OP' => 'required',
+                'KECAMATAN' => 'required',
+                'KELURAHAN' => 'required',
+                'TGL_SELESAI' => 'required',
+                'KETERANGAN_BERKAS' => 'nullable',
+            ]);
 
-    //     $dataProvider = $searchModel->search(request()->all());
+            $pelayanan = Pelayanan::create($request->all());
+            return response()->json([
+                'success' => true,
+                'data' => $pelayanan
+            ], 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => "Internal server error: " . $e->getMessage()
+            ], 500);
+        }
+    }
 
-    //     if (request()->has('hasEditable')) {
-    //         $id = request()->post('editableKey');
-    //         $model = Pelayanan::findOrFail($id);
 
-    //         $pelayanan = ['Pelayanan' => current(request()->post('Pelayanan'))];
-    //         if ($model->fill($pelayanan)->save()) {
-    //             switch ($model->STATUS_PELAYANAN) {
-    //                 case 2:
-    //                     $model->TGL_MASUK_PENILAI = now();
-    //                     $model->NIP_MASUK_PENILAI = Auth::user()->username;
-    //                     break;
-    //                 case 4:
-    //                     $model->TGL_SELESAI = now();
-    //                     $model->NIP_SELESAI = Auth::user()->username;
-    //                     break;
-    //                 case 5:
-    //                     $model->TGL_TERKONFIRMASI_WP = now();
-    //                     $model->NIP_TERKONFIRMASI_WP = Auth::user()->username;
-    //                     break;
-    //                 case 3:
-    //                     $model->TGL_PENETAPAN = now();
-    //                     $model->NIP_PENETAPAN = Auth::user()->username;
-    //                     break;
-    //                 case 6:
-    //                     $model->TGL_BERKAS_DITUNDA = now();
-    //                     $model->NIP_BERKAS_DITUNDA = Auth::user()->username;
-    //                     break;
-    //             }
+    public function apiShow($id)
+    {
+        try {
+            $pelayanan = Pelayanan::findOrFail($id);
+            return response()->json([
+                'success' => true,
+                'data' => $pelayanan
+            ], 200);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'error' => "Pelayanan not found"
+            ], 404);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => "Internal server error"
+            ], 500);
+        }
+    }
 
-    //             $model->save();
+    public function apiUpdate(Request $request, $id)
+    {
+        try {
+            $request->validate([
+                'NO_PELAYANAN' => 'required',
+                'KD_DATI2' => 'required',
+                'KD_JNS_PELAYANAN' => 'required',
+                'NAMA_PEMOHON' => 'required',
+                'ALAMAT_PEMOHON' => 'required',
+                'NOP' => 'required',
+                'KETERANGAN' => 'required',
+                'LETAK_OP' => 'required',
+                'KECAMATAN' => 'required',
+                'KELURAHAN' => 'required',
+                'TGL_SELESAI' => 'required',
+                'KETERANGAN_BERKAS' => 'text',
+            ]);
 
-    //             if (isset($pelayanan['Pelayanan']['STATUS_PELAYANAN'])) {
-    //                 return response()->json(['output' => $status[$model->STATUS_PELAYANAN], 'message' => '']);
-    //             } else {
-    //                 return response()->json(['output' => $model->KETERANGAN_BERKAS, 'message' => '']);
-    //             }
-    //         }
-    //         return response()->json(['output' => '', 'message' => 'Gagal']);
-    //     }
+            $pelayanan = Pelayanan::where('ID', $id)->update($request->all());
+            $pelayanan = Pelayanan::findOrFail($id);
+            return response()->json([
+                'success' => true,
+                'data' => $pelayanan
+            ], 200);
+        } catch (ValidationException $e) {
+            return response()->json([
+                'success' => false,
+                'error' => $e->getMessage()
+            ], 500);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => "Internal server error" . $e->getMessage()
+            ], 500);
+        }
+    }
 
-    //     return view('pelayanan.pelayanan', compact('searchModel', 'dataProvider', 'status', 'username', 'fullname'));
-    // }
+    public function apiDestroy($id)
+    {
+        try {
+            $pelayanan = Pelayanan::where('ID', $id)->delete();
+            return response()->json([
+                'success' => true,
+                'data' => $pelayanan
+            ], 200);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => "Internal server error" . $e->getMessage()
+            ], 500);
+        }
+    }
+
 
     public function index()
     {
@@ -87,70 +163,64 @@ class PelayananController extends Controller
         $fullname = $user->fullname;
         $username = $user->username;
 
-        $data_pelayanan = Pelayanan::all();
-        $no = 1;
-        return(view('pelayanan.pelayanan', compact('fullname', 'username')));
+        $response = Http::withHeaders([
+            "Authorization" => "Bearer " . "10|Q2ER3GcZ0RlDfZxk8EpO0xQQlWPxcqJLndJ1Yb821f928d1f"
+        ])->get(env("API_URL") . "/pelayanan");
+
+        if($response->successful()) {
+            $data_pelayanan = $response->json()['data']['data']; // Ambil data di dalam key 'data'
+        } else {
+            $data_pelayanan = [];
+        }
+
+        return view('pelayanan.pelayanan', compact('fullname', 'username', 'data_pelayanan'));
     }
 
 
+    public function data(Request $request)
+    {
+        $perPage = $request->input('length', 25);
+        $page = $request->input('start', 0) / $perPage + 1;
+
+        $query = Pelayanan::query();
+
+        // Apply additional filters or conditions based on DataTables request
+        // Example: if ($request->has('some_column')) $query->where('some_column', $request->input('some_column'));
+
+        // Handle global search
+        if ($request->filled('search.value')) {
+            $searchValue = $request->input('search.value');
+            $query->where(function ($query) use ($searchValue) {
+                // Adjust column names as per your database schema
+                $query->orWhere('NO_PELAYANAN', 'like', "%$searchValue%")
+                    ->orWhere('NAMA_PEMOHON', 'like', "%$searchValue%")
+                    ->orWhere('TANGGAL_PELAYANAN', 'like', "%$searchValue%")
+                    ->orWhere('KECAMATAN', 'like', "%$searchValue%")
+                    ->orWhere('KELURAHAN', 'like', "%$searchValue%")
+                    ->orWhere('KD_BLOK', 'like', "%$searchValue%")
+                    ->orWhere('NO_URUT', 'like', "%$searchValue%")
+                    ->orWhere('KD_JNS_PELAYANAN', 'like', "%$searchValue%")
+                    ->orWhere('STATUS_PELAYANAN', 'like', "%$searchValue%")
+                    ->orWhere('KETERANGAN_BERKAS', 'like', "%$searchValue%");
+            });
+        }
+
+        $pelayanans = $query->paginate($perPage, ['*'], 'page', $page);
 
 
-//     public function data()
-// {
-    
-//     try {
-//         $data = Pelayanan::query()->get();
-    
-//         return DataTables::of($data);
-//     } catch (\Exception $e) {
-//         Log::error($e->getMessage());
-//         return response()->json(['error' => 'An error occurred while fetching data.']);
-//     }
-// }
+        foreach ($pelayanans->items() as $index => $pelayanan) {
+            $pelayanan->DT_RowIndex = $index + 1 + ($page - 1) * $perPage;
+        }
 
-public function data(Request $request)
-{
-    $perPage = $request->input('length', 25);
-    $page = $request->input('start', 0) / $perPage + 1;
 
-    $query = Pelayanan::query();
-
-    // Apply additional filters or conditions based on DataTables request
-    // Example: if ($request->has('some_column')) $query->where('some_column', $request->input('some_column'));
-
-    // Handle global search
-    if ($request->filled('search.value')) {
-        $searchValue = $request->input('search.value');
-        $query->where(function ($query) use ($searchValue) {
-            // Adjust column names as per your database schema
-            $query->orWhere('NO_PELAYANAN', 'like', "%$searchValue%")
-                ->orWhere('NAMA_PEMOHON', 'like', "%$searchValue%")
-                ->orWhere('TANGGAL_PELAYANAN', 'like', "%$searchValue%")
-                ->orWhere('KECAMATAN', 'like', "%$searchValue%")
-                ->orWhere('KELURAHAN', 'like', "%$searchValue%")
-                ->orWhere('KD_BLOK', 'like', "%$searchValue%")
-                ->orWhere('NO_URUT', 'like', "%$searchValue%")
-                ->orWhere('KD_JNS_PELAYANAN', 'like', "%$searchValue%")
-                ->orWhere('STATUS_PELAYANAN', 'like', "%$searchValue%")
-                ->orWhere('KETERANGAN_BERKAS', 'like', "%$searchValue%");
-        });
+        return response()->json([
+            'data' => $pelayanans->items(),
+            'draw' => $request->input('draw', 1),
+            'recordsTotal' => $pelayanans->total(),
+            'recordsFiltered' => $pelayanans->total(),
+        ]);
     }
 
-    $pelayanans = $query->paginate($perPage, ['*'], 'page', $page);
-
-
-    foreach ($pelayanans->items() as $index => $pelayanan) {
-        $pelayanan->DT_RowIndex = $index + 1 + ($page - 1) * $perPage;
-    }    
-    
-
-    return response()->json([
-        'data' => $pelayanans->items(),
-        'draw' => $request->input('draw', 1),
-        'recordsTotal' => $pelayanans->total(),
-        'recordsFiltered' => $pelayanans->total(),
-    ]);
-}
     /**
      * Show the form for creating a new resource.
      */
@@ -219,8 +289,8 @@ public function data(Request $request)
             ->toArray();
 
         $STATUS_PELAYANAN  = \App\Models\StatusPelayanan::select(['id', DB::raw("CONCAT('[', id, '] ', nama) AS full_name")])
-        ->pluck('full_name', 'id')
-        ->toArray();
+            ->pluck('full_name', 'id')
+            ->toArray();
 
         return view('pelayanan.laporan_pelayanan', compact('fullname', 'username', 'JNS_PELAYANAN', 'STATUS_PELAYANAN'));
     }
@@ -235,9 +305,8 @@ public function data(Request $request)
         $fullname = $user->fullname;
         $username = $user->username;
         $model = Pelayanan::where(['ID' => $ID])->first();
-        
-        return view('pelayanan.detail_pelayanan', compact('fullname', 'username', 'model'));
 
+        return view('pelayanan.detail_pelayanan', compact('fullname', 'username', 'model'));
     }
 
     /**
@@ -262,7 +331,7 @@ public function data(Request $request)
         $TGL_AKHIR = $request->TGL_AKHIR;
         $JNS_PELAYANAN = $request->JNS_PELAYANAN;
         $STATUS_PELAYANAN = $request->STATUS_PELAYANAN;
-        
+
 
         return Excel::download(new PelayananExport($TGL_AWAL, $TGL_AKHIR, $JNS_PELAYANAN, $STATUS_PELAYANAN), 'Pelayanan.xlsx');
     }
@@ -274,7 +343,8 @@ public function data(Request $request)
     {
         $id = $pelayanan;
         $data_pelayanan = Pelayanan::where([
-            ['ID', '=', $id]]);
+            ['ID', '=', $id]
+        ]);
 
         if (!$data_pelayanan) {
             // Handle the case where the model is not found
@@ -285,5 +355,4 @@ public function data(Request $request)
             // Replace 'your.route.name' with the actual name of the route you want to redirect to
         }
     }
-    
 }

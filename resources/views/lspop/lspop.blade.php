@@ -40,7 +40,7 @@
         </div>
 
         <!-- KODE DATA-DATA SPOP -->
-        @if(isset($spopData))
+        {{-- @if(isset($spopData)) --}}
         <div class="AddSpopBox">
           <!-- KODE SURAT PEMBERITAHUAN OBJEK PAJAK -->
           <h6 class="ms-3">Surat Pemberitahuan Objek Pajak</h6>
@@ -144,7 +144,7 @@
                         </form>
                     </div>
 			</div>
-      @endif
+      {{-- @endif --}}
 		</div>
 	</div>
 	@endsection

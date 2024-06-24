@@ -12,12 +12,76 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\BerhakNjoptkp;
 use App\Models\DatSubjekPajak;
 use App\Models\RefPropinsi;
+use Exception;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class SpopController extends Controller
 {
+    public function apiStore(Request $request)
+    {
+        try {
+            $request->validate([
+                'jenis_transaksi' => 'required',
+                'nop' => 'required',
+                'nop_bersama' => 'required',
+                'nop_asal' => 'required',
+                'no_sppt_lama' => 'required',
+                'jalan' => 'required',
+                'rt' => 'required',
+                'rw' => 'required',
+                'no' => 'required',
+                'kelurahan' => 'required',
+                'nomor_legalitas' => 'required',
+                'nik' => 'required',
+                'nama' => 'required',
+                'npwp' => 'required',
+                'alamat' => 'required',
+                'rw_alamat' => 'required',
+                'rt_alamat' => 'required',
+                'no_alamat' => 'required',
+                'kode_pos' => 'required',
+                'kelurahan_alamat' => 'required',
+                'status' => 'required',
+                'pekerjaan' => 'required',
+            ]);
+            $spop = Spop::create($request->all());
+            return response()->json([
+                'success' => true,
+                'message' => 'Data berhasil ditambahkan',
+                'data' => $spop,
+            ], 201);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => "Internal Server Error" . $e->getMessage(),
+            ], 500);
+        }
+    }
+
+    public function apiShow($nop)
+    {
+        try {
+            $spop = Spop::where('nop', $nop)->first();
+            return response()->json([
+                'success' => true,
+                'message' => 'Data SPOP ditemukan',
+                'data' => $spop,
+            ]);
+        } catch (ModelNotFoundException $e) {
+            return response()->json([
+                'success' => false,
+                'error' => "Data SPOP tidak ditemukan",
+            ], 404);
+        } catch (Exception $e) {
+            return response()->json([
+                'success' => false,
+                'error' => "Internal Server Error" . $e->getMessage(),
+            ], 500);
+        }
+    }
+
     public function index()
     {
         $data_user = DB::table('users');
@@ -28,36 +92,35 @@ class SpopController extends Controller
         return view('spop.spop', compact('fullname', 'username'));
     }
 
-
     public function data(Request $request)
     {
         $perPage = $request->input('length', 25);
         $page = $request->input('start', 0) / $perPage + 1;
-    
-        $query = DB::table('db_simpbb.spop');
-    
+
+        $query = DB::table('pbb.spop');
+
         // Apply additional filters or conditions based on DataTables request
         // Example: if ($request->has('some_column')) $query->where('some_column', $request->input('some_column'));
-    
+
         // Handle global search
         if ($request->filled('search.value')) {
             $searchValue = $request->input('search.value');
             $query->where(function ($query) use ($searchValue) {
                 // Adjust column names as per your database schema
                 $query->orWhere(DB::raw("CONCAT(spop.KD_PROPINSI, spop.KD_DATI2, spop.KD_KECAMATAN, spop.KD_KELURAHAN, spop.KD_BLOK, spop.NO_URUT, spop.KD_JNS_OP)"), 'like', "%$searchValue%")
-                    ->orWhere('spop.SUBJEK_PAJAK_ID', 'like', "%$searchValue%")
+                    ->orWhere('spop.NOP', 'like', "%$searchValue%")
                     ->orWhere('spop.JALAN_OP', 'like', "%$searchValue%")
                     ->orWhere('spop.LUAS_BUMI', 'like', "%$searchValue%");
             });
         }
-    
+
         $spops = $query->paginate($perPage, ['*'], 'page', $page);
-    
+
         foreach ($spops->items() as $index => $spop) {
             $spop->DT_RowIndex = $index + 1 + ($page - 1) * $perPage;
             $spop->nop = $spop->KD_PROPINSI . $spop->KD_DATI2 . $spop->KD_KECAMATAN . $spop->KD_KELURAHAN . $spop->KD_BLOK . $spop->NO_URUT . $spop->KD_JNS_OP;
         }
-    
+
         // Build the JSON response explicitly
         $jsonResponse = [
             'data' => $spops->items(),
@@ -65,12 +128,9 @@ class SpopController extends Controller
             'recordsTotal' => $spops->total(),
             'recordsFiltered' => $spops->total(),
         ];
-    
+
         return response()->json($jsonResponse);
     }
-
-
-
 
     public function create()
     {
@@ -102,52 +162,6 @@ class SpopController extends Controller
 
     public function store(Request $request)
     {
-        // // Validate the request...
-        // $request->validate([
-        //     'KD_PROPINSI' => 'required|string|max:2',
-        //     'KD_DATI2' => 'required|string|max:2',
-        //     'KD_KECAMATAN' => 'required|string|max:3',
-        //     'KD_KELURAHAN' => 'required|string|max:3',
-        //     'KD_BLOK' => 'required|string|max:3',
-        //     'NO_URUT' => 'required|string|max:4',
-        //     'KD_JNS_OP' => 'required|string|max:1',
-        //     'SUBJEK_PAJAK_ID' => 'required|string|max:30',
-        //     'JNS_TRANSAKSI_OP' => 'required|string|max:1',
-        //     'JALAN_OP' => 'required|string|max:30',
-        //     'KD_STATUS_WP' => 'required|string|max:1',
-        //     'LUAS_BUMI' => 'required|integer',
-        //     'JNS_BUMI' => 'required|string|max:1',
-        //     'TGL_PENDATAAN_OP' => 'required|date',
-        //     'TGL_PEMERIKSAAN_OP' => 'required|date',
-        //     'KD_PROPINSI_BERSAMA' => 'nullable|string|max:2',
-        //     'KD_DATI2_BERSAMA' => 'nullable|string|max:2',
-        //     'KD_KECAMATAN_BERSAMA' => 'nullable|string|max:3',
-        //     'KD_KELURAHAN_BERSAMA' => 'nullable|string|max:3',
-        //     'KD_BLOK_BERSAMA' => 'nullable|string|max:3',
-        //     'NO_URUT_BERSAMA' => 'nullable|string|max:4',
-        //     'KD_JNS_OP_BERSAMA' => 'nullable|string|max:1',
-        //     'KD_PROPINSI_ASAL' => 'nullable|string|max:2',
-        //     'KD_DATI2_ASAL' => 'nullable|string|max:2',
-        //     'KD_KECAMATAN_ASAL' => 'nullable|string|max:3',
-        //     'KD_KELURAHAN_ASAL' => 'nullable|string|max:3',
-        //     'KD_BLOK_ASAL' => 'nullable|string|max:3',
-        //     'NO_URUT_ASAL' => 'nullable|string|max:4',
-        //     'KD_JNS_OP_ASAL' => 'nullable|string|max:1',
-        //     'NO_SPPT_LAMA' => 'nullable|string|max:30',
-        //     'RW_OP' => 'nullable|string|max:2',
-        //     'RT_OP' => 'nullable|string|max:3',
-        //     'KD_ZNT' => 'nullable|string|max:2',
-        //     'NO_FORMULIR_SPOP' => 'nullable|string|max:11',
-        //     'BLOK_KAV_NO_OP' => 'nullable|string|max:15',
-        //     'NIP_PENDATA' => 'nullable|string|max:20',
-        //     'NIP_PEMERIKSA_OP' => 'nullable|string|max:20',
-        //     'NO_PERSIL' => 'nullable|string|max:5',
-        //     'NO_URUT' => 'nullable|string|max:4',
-        //     'NO_URUT_BERSAMA' => 'nullable|string|max:4',
-        //     'NO_URUT_ASAL' => 'nullable|string|max:4',
-        //     'NO_SPPT_LAMA' => 'nullable|string|max:30',
-        //     'NOP' => 'nullable|string|max:18',
-        // ]);
         $request->validate([
             'jenis_transaksi' => 'required',
             'nop' => 'required',
@@ -168,7 +182,7 @@ class SpopController extends Controller
             'pekerjaan' => 'required',
         ]);
 
-        Spop::create($request->all());
+        $spop = Spop::create($request->all());
         return redirect()->back()->with('success', 'Data berhasil ditambahkan');
 
         // Ambil data yang dikirim dari form
@@ -194,13 +208,13 @@ class SpopController extends Controller
 
         if ($request->isMethod('post') && $model->fill($request->all())->save()) {
             // Hapus data sebelumnya jika ada
-            $wp = DatSubjekPajak::find($model->SUBJEK_PAJAK_ID);
+            $wp = DatSubjekPajak::find($model->NOP);
             if (!is_null($wp)) {
                 $wp->delete();
             }
 
             $modelWp->fill($request->all());
-            $modelWp->SUBJEK_PAJAK_ID = $model->SUBJEK_PAJAK_ID;
+            $modelWp->NOP = $model->NOP;
             $modelWp->save();
 
             return redirect()->route('spop.index', [
@@ -230,6 +244,7 @@ class SpopController extends Controller
         return redirect()->route('spop.index')
             ->with('success', 'SPOP berhasil ditambah.');
     }
+
     public function edit($spop)
     {
         $data_user = DB::table('users');
@@ -263,7 +278,7 @@ class SpopController extends Controller
 
 
         $data_spop = $this->findModel($KD_PROPINSI, $KD_DATI2, $KD_KECAMATAN, $KD_KELURAHAN, $KD_BLOK, $NO_URUT, $KD_JNS_OP);
-        $data_wp = $this->findModelWp($data_spop->SUBJEK_PAJAK_ID);
+        $data_wp = $this->findModelWp($data_spop->NOP);
         // $data_spop->where('nop', $spop);
         return view('spop.edit_spop', compact('data_spop', 'data_wp', 'fullname', 'username', 'kecamatanOptions', 'kelurahanOptions', 'spop'));
     }
@@ -309,10 +324,10 @@ class SpopController extends Controller
         }
     }
 
-    protected function findModelWp($SUBJEK_PAJAK_ID)
+    protected function findModelWp($NOP)
     {
-        $model_wp = DatSubjekPajak::where('SUBJEK_PAJAK_ID', $SUBJEK_PAJAK_ID)->first();
-        
+        $model_wp = DatSubjekPajak::where('NOP', $NOP)->first();
+
         if ($model_wp) {
             return $model_wp;
         }
@@ -322,7 +337,7 @@ class SpopController extends Controller
 
 
     public function update($spop)
-    {   
+    {
         $KD_PROPINSI = substr($spop, 0, 2);
         $KD_DATI2 = substr($spop, 2, 2);
         $KD_KECAMATAN = substr($spop, 4, 3);
@@ -333,20 +348,20 @@ class SpopController extends Controller
 
         $model = $this->findModel($KD_PROPINSI, $KD_DATI2, $KD_KECAMATAN, $KD_KELURAHAN, $KD_BLOK, $NO_URUT, $KD_JNS_OP);
         try {
-            $model_wp = $this->findModelWp($model->SUBJEK_PAJAK_ID);
-        } catch (ModelNotFoundException $e){
+            $model_wp = $this->findModelWp($model->NOP);
+        } catch (ModelNotFoundException $e) {
             throw new NotFoundHttpException('The requested page does not exist.');
         };
-        
-        
+
+
         $propinsis = RefPropinsi::pluck('NM_PROPINSI', 'KD_PROPINSI');
 
         if (
             $model->fill(request()->input()) && $model->save() &&
             $model_wp->fill(request()->input()) && $model_wp->save()
         ) {
-        $NOP = $spop;
-            
+            $NOP = $spop;
+
             return redirect()->route('spop.show', [
                 'KD_PROPINSI' => $model->KD_PROPINSI,
                 'KD_DATI2' => $model->KD_DATI2,
@@ -375,81 +390,7 @@ class SpopController extends Controller
     }
 
 
-    // public function show($NOP)
-    // {
-    //     // Fetch user data
-    //     $data_user = DB::table('users');
-    //     $user = $data_user->where('id', Auth()->user()->id)->first();
-    //     $fullname = $user->fullname;
-    //     $username = $user->username;
 
-    //     $KD_PROPINSI = substr($NOP, 0, 2);
-    //     $KD_DATI2 = substr($NOP, 2, 2);
-    //     $KD_KECAMATAN = substr($NOP, 4, 3);
-    //     $KD_KELURAHAN = substr($NOP, 7, 3);
-    //     $KD_BLOK = substr($NOP, 10, 3);
-    //     $NO_URUT = substr($NOP, 13, 4);
-    //     $KD_JNS_OP = substr($NOP, 17, 1);
-        
-    //     $result = DB::table('spop')
-    //     ->leftJoin('dat_subjek_pajak', 'spop.SUBJEK_PAJAK_ID', '=', 'dat_subjek_pajak.SUBJEK_PAJAK_ID')
-    //     ->leftJoin(DB::raw("(SELECT
-    //             KD_PROPINSI,
-    //             KD_DATI2,
-    //             KD_KECAMATAN,
-    //             KD_KELURAHAN,
-    //             KD_BLOK,
-    //             NO_URUT,
-    //             KD_JNS_OP,
-    //             SUM(LUAS_BNG) as LUAS_BNG,
-    //             COUNT(1) as JML_BNG
-    //         FROM dat_op_bangunan
-    //         WHERE
-    //             KD_PROPINSI = $KD_PROPINSI AND
-    //             KD_DATI2 = $KD_DATI2 AND
-    //             KD_KECAMATAN = $KD_KECAMATAN AND
-    //             KD_KELURAHAN = $KD_KELURAHAN AND
-    //             KD_BLOK = $KD_BLOK AND
-    //             NO_URUT = $NO_URUT AND
-    //             KD_JNS_OP = $KD_JNS_OP
-    //         GROUP BY KD_PROPINSI, KD_DATI2, KD_KECAMATAN, KD_KELURAHAN, KD_BLOK, NO_URUT, KD_JNS_OP) as dat_op_bangunan"),
-    //         function ($join) {
-    //             $join->on('spop.KD_PROPINSI', '=', 'dat_op_bangunan.KD_PROPINSI');
-    //             $join->on('spop.KD_DATI2', '=', 'dat_op_bangunan.KD_DATI2');
-    //             $join->on('spop.KD_KECAMATAN', '=', 'dat_op_bangunan.KD_KECAMATAN');
-    //             $join->on('spop.KD_KELURAHAN', '=', 'dat_op_bangunan.KD_KELURAHAN');
-    //             $join->on('spop.KD_BLOK', '=', 'dat_op_bangunan.KD_BLOK');
-    //             $join->on('spop.NO_URUT', '=', 'dat_op_bangunan.NO_URUT');
-    //             $join->on('spop.KD_JNS_OP', '=', 'dat_op_bangunan.KD_JNS_OP');
-    //         })
-    //     ->where([
-    //         ['spop.KD_PROPINSI', '=', substr($NOP, 0, 2)],
-    //         ['spop.KD_DATI2', '=', substr($NOP, 2, 2)],
-    //         ['spop.KD_KECAMATAN', '=', substr($NOP, 4, 3)],
-    //         ['spop.KD_KELURAHAN', '=', substr($NOP, 7, 3)],
-    //         ['spop.KD_BLOK', '=', substr($NOP, 10, 3)],
-    //         ['spop.NO_URUT', '=', substr($NOP, 13, 4)],
-    //         ['spop.KD_JNS_OP', '=', substr($NOP, 17, 1)],
-    //     ])
-    //     ->groupBy('spop.KD_PROPINSI', 'spop.KD_DATI2', 'spop.KD_KECAMATAN', 'spop.KD_KELURAHAN', 'spop.KD_BLOK', 'spop.NO_URUT', 'spop.KD_JNS_OP')
-    //     ->get()
-    //     ->first();
-    //     // dd($result);
-
-    //     $spop = $NOP;
-        
-    //     // Periksa apakah permintaan datang dari AJAX
-    //     if (request()->ajax()) {
-    //         // Jika ya, kirim respons JSON
-    //         return response()->json($result);
-    //     } else {
-
-    //         // dd($result);
-
-    //         // Jika tidak, tampilkan view HTML
-    //         return view('spop.detail_spop', compact('fullname', 'username', 'result', 'spop'));
-    //     }
-    // }
 
     public function search(Request $request)
     {
@@ -457,7 +398,7 @@ class SpopController extends Controller
         // $data = Spop::where('nop', $nop)->first();
         // return response()->json($data);
         $nop = $request->input('NOP');
-        $spopData = Spop::where('SUBJEK_PAJAK_ID', $nop)->first();
+        $spopData = Spop::where('NOP', $nop)->first();
 
         $data_user = DB::table('users');
         $user = $data_user->where('id', Auth()->user()->id)->first();
@@ -472,3 +413,187 @@ class SpopController extends Controller
         }
     }
 }
+
+// namespace App\Http\Controllers;
+
+// use App\Models\Spop;
+// use Illuminate\Http\Request;
+// use Illuminate\Support\Facades\DB;
+// use Illuminate\Support\Facades\Auth;
+// use Exception;
+// use Illuminate\Database\Eloquent\ModelNotFoundException;
+// use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+
+// class SpopController extends Controller
+// {
+//     public function apiStore(Request $request)
+//     {
+//         try {
+//             $request->validate([
+//                 'jenis_transaksi' => 'required',
+//                 'nop' => 'required',
+//                 'nop_bersama' => 'required',
+//                 'nop_asal' => 'required',
+//                 'no_sppt_lama' => 'required',
+//                 'jalan' => 'required',
+//                 'rt' => 'required',
+//                 'rw' => 'required',
+//                 'no' => 'required',
+//                 'kelurahan' => 'required',
+//                 'nomor_legalitas' => 'required',
+//                 'nik' => 'required',
+//                 'nama' => 'required',
+//                 'npwp' => 'required',
+//                 'alamat' => 'required',
+//                 'rw_alamat' => 'required',
+//                 'rt_alamat' => 'required',
+//                 'no_alamat' => 'required',
+//                 'kode_pos' => 'required',
+//                 'kelurahan_alamat' => 'required',
+//                 'status' => 'required',
+//                 'pekerjaan' => 'required',
+//             ]);
+//             $spop = Spop::create($request->all());
+//             return response()->json([
+//                 'success' => true,
+//                 'message' => 'Data berhasil ditambahkan',
+//                 'data' => $spop,
+//             ], 201);
+//         } catch (Exception $e) {
+//             return response()->json([
+//                 'success' => false,
+//                 'error' => "Internal Server Error: " . $e->getMessage(),
+//             ], 500);
+//         }
+//     }
+
+//     public function show($nop)
+//     {
+//         try {
+//             $spop = Spop::where('nop', $nop)->first();
+//             if (!$spop) {
+//                 throw new ModelNotFoundException();
+//             }
+//             return response()->json([
+//                 'success' => true,
+//                 'message' => 'Data SPOP ditemukan',
+//                 'data' => $spop,
+//             ]);
+//         } catch (ModelNotFoundException $e) {
+//             return response()->json([
+//                 'success' => false,
+//                 'error' => "Data SPOP tidak ditemukan",
+//             ], 404);
+//         } catch (Exception $e) {
+//             return response()->json([
+//                 'success' => false,
+//                 'error' => "Internal Server Error: " . $e->getMessage(),
+//             ], 500);
+//         }
+//     }
+
+//     public function index()
+//     {
+//         $data_user = DB::table('users');
+//         $user = $data_user->where('id', Auth()->user()->id)->first();
+//         $fullname = $user->fullname;
+//         $username = $user->username;
+
+//         return view('spop.spop', compact('fullname', 'username'));
+//     }
+
+//     public function create()
+//     {
+//         $data_user = DB::table('users');
+//         $user = $data_user->where('id', Auth()->user()->id)->first();
+//         $fullname = $user->fullname;
+//         $username = $user->username;
+
+//         return view('spop.add_spop', compact('fullname', 'username'));
+//     }
+
+//     public function store(Request $request)
+//     {
+//         $request->validate([
+//             'jenis_transaksi' => 'required',
+//             'nop' => 'required',
+//             'nop_bersama' => 'required',
+//             'nop_asal' => 'required',
+//             'no_sppt_lama' => 'required',
+//             'jalan' => 'required',
+//             'rt' => 'required',
+//             'rw' => 'required',
+//             'no' => 'required',
+//             'kelurahan' => 'required',
+//             'nomor_legalitas' => 'required',
+//             'nik' => 'required',
+//             'nama' => 'required',
+//             'npwp' => 'required',
+//             'alamat' => 'required',
+//             'rw_alamat' => 'required',
+//             'rt_alamat' => 'required',
+//             'no_alamat' => 'required',
+//             'kode_pos' => 'required',
+//             'kelurahan_alamat' => 'required',
+//             'status' => 'required',
+//             'pekerjaan' => 'required',
+//         ]);
+
+//         $spop = Spop::create($request->all());
+//         return redirect()->back()->with('success', 'Data berhasil ditambahkan');
+//     }
+
+//     public function search(Request $request)
+//     {
+//         $nop = $request->input('nop');
+//         $spopData = Spop::where('nop', $nop)->first();
+
+//         $data_user = DB::table('users');
+//         $user = $data_user->where('id', Auth()->user()->id)->first();
+//         $fullname = $user->fullname;
+//         $username = $user->username;
+
+//         if ($spopData) {
+//             return view('spop.spop', compact('spopData', 'fullname', 'username'));
+//         } else {
+//             return redirect()->back()->with('error', 'Data tidak ditemukan');
+//         }
+//     }
+
+
+//     public function update(Request $request, $nop)
+//     {
+//         $request->validate([
+//             'jenis_transaksi' => 'required',
+//             'nop' => 'required',
+//             'nop_bersama' => 'required',
+//             'nop_asal' => 'required',
+//             'no_sppt_lama' => 'required',
+//             'jalan' => 'required',
+//             'rt' => 'required',
+//             'rw' => 'required',
+//             'no' => 'required',
+//             'kelurahan' => 'required',
+//             'nomor_legalitas' => 'required',
+//             'nik' => 'required',
+//             'nama' => 'required',
+//             'npwp' => 'required',
+//             'alamat' => 'required',
+//             'rw_alamat' => 'required',
+//             'rt_alamat' => 'required',
+//             'no_alamat' => 'required',
+//             'kode_pos' => 'required',
+//             'kelurahan_alamat' => 'required',
+//             'status' => 'required',
+//             'pekerjaan' => 'required',
+//         ]);
+
+//         $spop = Spop::where('nop', $nop)->first();
+//         if ($spop) {
+//             $spop->update($request->all());
+//             return redirect()->route('spop.index')->with('success', 'Data berhasil diperbarui');
+//         } else {
+//             return redirect()->back()->with('error', 'Data tidak ditemukan');
+//         }
+//     }
+// }

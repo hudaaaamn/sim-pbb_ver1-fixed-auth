@@ -61,21 +61,22 @@ use Illuminate\Support\Facades\DB;
 class Pelayanan extends Model
 {
 	protected $table = 'pelayanan';
-	public $incrementing = false;
+	protected $primaryKey = 'ID';
 	public $timestamps = false;
 
-	protected function serializeDate(DateTimeInterface $date){
+	protected function serializeDate(DateTimeInterface $date)
+	{
 		return $date->format('Y-m-d');
 	}
 
 	/**
-     * Transform the model attributes to a specific JSON format.
-     *
-     * @return array
-     */
-    public function toJsonFormat()
-    {
-        return [
+	 * Transform the model attributes to a specific JSON format.
+	 *
+	 * @return array
+	 */
+	public function toJsonFormat()
+	{
+		return [
 			'ID' => $this->ID,  // Replace "id" with the actual column name
 			'NO_PELAYANAN' => $this->NO_PELAYANAN,
 			'NAMA_PEMOHON' => $this->NAMA_PEMOHON,
@@ -87,55 +88,54 @@ class Pelayanan extends Model
 			'KD_JNS_PELAYANAN' => $this->KD_JNS_PELAYANAN,
 			'STATUS_PELAYANAN' => $this->STATUS_PELAYANAN,
 			'KETERANGAN_BERKAS' => $this->KETERANGAN_BERKAS,
-        ];
-    }
+		];
+	}
 
 
 	public static $rules = [
-        'NO_PELAYANAN' => 'required|string|max:13',
-        'TANGGAL_PELAYANAN' => 'sometimes|date',
-        'TANGGAL_PERKIRAAN_SELESAI' => 'sometimes|date',
-        'TGL_MASUK_PENILAI' => 'sometimes|date',
-        'TGL_SELESAI' => 'sometimes|date',
-        'TGL_TERKONFIRMASI_WP' => 'sometimes|date',
-        'TGL_PENETAPAN' => 'sometimes|date',
-        'TGL_BERKAS_DITUNDA' => 'sometimes|date',
-        'STATUS_PELAYANAN' => 'sometimes|integer',
-        'CATATAN' => 'nullable|string',
-        'KETERANGAN' => 'nullable|string',
-        'NAMA_PEMOHON' => 'nullable|string|max:300',
-        'NIP_PETUGAS_PENERIMA' => 'nullable|string|max:300',
-        'NAMA_PETUGAS_PENERIMA' => 'nullable|string|max:300',
-        'NIP_AR' => 'nullable|string|max:300',
-        'NAMA_AR' => 'nullable|string|max:300',
-        'NIP_MASUK_PENILAI' => 'nullable|string|max:300',
-        'NIP_SELESAI' => 'nullable|string|max:300',
-        'NIP_TERKONFIRMASI_WP' => 'nullable|string|max:300',
-        'NIP_PENETAPAN' => 'nullable|string|max:300',
-        'NIP_BERKAS_DITUNDA' => 'nullable|string|max:300',
-        'ALAMAT_PEMOHON' => 'nullable|string|max:500',
-        'TTD_JABATAN_KIRI' => 'nullable|string|max:500',
-        'TTD_NAMA_KIRI' => 'nullable|string|max:500',
-        'TTD_NIP_KIRI' => 'nullable|string|max:500',
-        'TTD_JABATAN_KANAN' => 'nullable|string|max:500',
-        'TTD_NAMA_KANAN' => 'nullable|string|max:500',
-        'TTD_NIP_KANAN' => 'nullable|string|max:500',
-        'LETAK_OP' => 'nullable|string|max:500',
-        'KD_PROPINSI' => 'nullable|string|max:2',
-        'KD_DATI2' => 'nullable|string|max:2',
-        'KD_JNS_PELAYANAN' => 'nullable|string|max:2',
-        'KD_KECAMATAN' => 'nullable|string|max:3',
-        'KD_KELURAHAN' => 'nullable|string|max:3',
-        'KD_BLOK' => 'nullable|string|max:3',
-        'NO_URUT' => 'nullable|string|max:4',
-        'KD_JNS_OP' => 'nullable|string|max:1',
-        'KECAMATAN' => 'nullable|string|max:200',
-        'KELURAHAN' => 'nullable|string|max:200',
-        'KETERANGAN_BERKAS' => 'nullable|string|max:255',
-    ];
+		'NO_PELAYANAN' => 'required|string|max:13',
+		'TANGGAL_PELAYANAN' => 'sometimes|date',
+		'TANGGAL_PERKIRAAN_SELESAI' => 'sometimes|date',
+		'TGL_MASUK_PENILAI' => 'sometimes|date',
+		'TGL_SELESAI' => 'sometimes|date',
+		'TGL_TERKONFIRMASI_WP' => 'sometimes|date',
+		'TGL_PENETAPAN' => 'sometimes|date',
+		'TGL_BERKAS_DITUNDA' => 'sometimes|date',
+		'STATUS_PELAYANAN' => 'sometimes|integer',
+		'CATATAN' => 'nullable|string',
+		'KETERANGAN' => 'nullable|string',
+		'NAMA_PEMOHON' => 'nullable|string|max:300',
+		'NIP_PETUGAS_PENERIMA' => 'nullable|string|max:300',
+		'NAMA_PETUGAS_PENERIMA' => 'nullable|string|max:300',
+		'NIP_AR' => 'nullable|string|max:300',
+		'NAMA_AR' => 'nullable|string|max:300',
+		'NIP_MASUK_PENILAI' => 'nullable|string|max:300',
+		'NIP_SELESAI' => 'nullable|string|max:300',
+		'NIP_TERKONFIRMASI_WP' => 'nullable|string|max:300',
+		'NIP_PENETAPAN' => 'nullable|string|max:300',
+		'NIP_BERKAS_DITUNDA' => 'nullable|string|max:300',
+		'ALAMAT_PEMOHON' => 'nullable|string|max:500',
+		'TTD_JABATAN_KIRI' => 'nullable|string|max:500',
+		'TTD_NAMA_KIRI' => 'nullable|string|max:500',
+		'TTD_NIP_KIRI' => 'nullable|string|max:500',
+		'TTD_JABATAN_KANAN' => 'nullable|string|max:500',
+		'TTD_NAMA_KANAN' => 'nullable|string|max:500',
+		'TTD_NIP_KANAN' => 'nullable|string|max:500',
+		'LETAK_OP' => 'nullable|string|max:500',
+		'KD_PROPINSI' => 'nullable|string|max:2',
+		'KD_DATI2' => 'nullable|string|max:2',
+		'KD_JNS_PELAYANAN' => 'nullable|string|max:2',
+		'KD_KECAMATAN' => 'nullable|string|max:3',
+		'KD_KELURAHAN' => 'nullable|string|max:3',
+		'KD_BLOK' => 'nullable|string|max:3',
+		'NO_URUT' => 'nullable|string|max:4',
+		'KD_JNS_OP' => 'nullable|string|max:1',
+		'KECAMATAN' => 'nullable|string|max:200',
+		'KELURAHAN' => 'nullable|string|max:200',
+		'KETERANGAN_BERKAS' => 'nullable|string|max:255',
+	];
 
 	protected $casts = [
-		'ID' => 'int',
 		'TANGGAL_PELAYANAN' => 'datetime',
 		'TANGGAL_PERKIRAAN_SELESAI' => 'datetime',
 		'STATUS_PELAYANAN' => 'int',
@@ -147,7 +147,6 @@ class Pelayanan extends Model
 	];
 
 	protected $fillable = [
-		'ID',
 		'NAMA_PEMOHON',
 		'ALAMAT_PEMOHON',
 		'LETAK_OP',
@@ -191,16 +190,17 @@ class Pelayanan extends Model
 	];
 
 
-	public function getLaporan($tgl_awal, $tgl_akhir, $jenis_pelayanan, $status_pelayanan){
-        $q = '';
-        if(!empty($status_pelayanan)){
-            $q .=  " AND STATUS_PELAYANAN = $status_pelayanan";
-        }
-        if(!empty($jenis_pelayanan)){
-            $q .=  " AND pelayanan.KD_JNS_PELAYANAN = '$jenis_pelayanan' ";
-        }
-        
-	
+	public function getLaporan($tgl_awal, $tgl_akhir, $jenis_pelayanan, $status_pelayanan)
+	{
+		$q = '';
+		if (!empty($status_pelayanan)) {
+			$q .=  " AND STATUS_PELAYANAN = $status_pelayanan";
+		}
+		if (!empty($jenis_pelayanan)) {
+			$q .=  " AND pelayanan.KD_JNS_PELAYANAN = '$jenis_pelayanan' ";
+		}
+
+
 		$data = DB::table('pelayanan')
 			->select(
 				'NO_PELAYANAN',
@@ -224,10 +224,7 @@ class Pelayanan extends Model
 			// ->whereBetween('TANGGAL_PELAYANAN', [$tgl_awal, $tgl_akhir])
 			->whereRaw("TANGGAL_PELAYANAN BETWEEN '$tgl_awal' AND '$tgl_akhir' $q")
 			->get();
-	
-		return $data;
-		
-        
 
-    }
+		return $data;
+	}
 }
