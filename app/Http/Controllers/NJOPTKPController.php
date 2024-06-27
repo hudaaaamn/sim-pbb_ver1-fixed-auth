@@ -24,10 +24,12 @@ class NJOPTKPController extends Controller
         DB::statement("SET SESSION sql_mode = ''");
         // DB::statement("SET max_execution_time = 3000000"); // Baris ini dihapus karena menyebabkan error
 
+        // Tambahkan logging untuk melihat query yang dijalankan
+        DB::enableQueryLog();
+
         $results = Sppt::select(
             'dat_subjek_pajak.SUBJEK_PAJAK_ID as subjek_pajak_id',
             'sppt.NM_WP_SPPT as NM_WP_SPPT',
-            // 'spop.jenis_transaksi',
             'spop.nop',
             'spop.nop_bersama',
             'spop.nop_asal',
@@ -53,12 +55,11 @@ class NJOPTKPController extends Controller
             DB::raw('MAX(sppt.NJOP_SPPT) AS max_NJOP_SPPT'),
             'sppt.THN_PAJAK_SPPT as THN_PAJAK_SPPT'
         )
-            ->join('spop', 'spop.nop', '=') // Sesuaikan kolom 'nop' dengan kolom yang relevan pada tabel 'sppt'
+            ->join('spop', 'sppt.nop', '=', 'spop.nop') // Sesuaikan kolom 'nop' dengan kolom yang relevan pada tabel 'sppt'
             ->join('dat_subjek_pajak', 'dat_subjek_pajak.SUBJEK_PAJAK_ID', '=', 'spop.nik') // Sesuaikan kolom 'nik' jika ada perubahan
             ->groupBy(
                 'dat_subjek_pajak.SUBJEK_PAJAK_ID',
                 'sppt.NM_WP_SPPT',
-                'spop.jenis_transaksi',
                 'spop.nop',
                 'spop.nop_bersama',
                 'spop.nop_asal',
@@ -80,14 +81,20 @@ class NJOPTKPController extends Controller
                 'spop.kelurahan_alamat',
                 'spop.status',
                 'spop.pekerjaan',
-                'sppt.NJOPTKP_SPPT'
+                'sppt.NJOPTKP_SPPT',
+                'sppt.THN_PAJAK_SPPT'
             )
             ->paginate(25);
+
+        // Log query yang dijalankan
+        $queries = DB::getQueryLog();
+        dd($queries);
 
         $no = ($results->currentPage() - 1) * $results->perPage() + 1;
 
         return view('keuangan.njoptkp', compact('fullname', 'username', 'results', 'no'));
     }
+
 
     /**
      * Store a newly created resource in storage.
@@ -147,4 +154,3 @@ class NJOPTKPController extends Controller
         //
     }
 }
-

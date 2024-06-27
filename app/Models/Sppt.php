@@ -70,7 +70,7 @@ class Sppt extends Model
   public $incrementing = false;
   public $timestamps = false;
 
-  protected $primaryKey = ['KD_PROPINSI', 'KD_DATI2', 'KD_KECAMATAN', 'KD_KELURAHAN', 'KD_BLOK', 'NO_URUT', 'KD_JNS_OP', 'THN_PAJAK_SPPT'];
+  protected $primaryKey = ['KD_PROPINSI', 'KD_DATI2', 'KD_KECAMATAN', 'KD_KELURAHAN', 'KD_BLOK', 'NO_URUT', 'KD_JNS_OP', 'THN_PAJAK_SPPT', 'NOP'];
 
 
   protected $casts = [
@@ -92,7 +92,8 @@ class Sppt extends Model
     'STATUS_TAGIHAN_SPPT' => 'bool',
     'STATUS_CETAK_SPPT' => 'bool',
     'TGL_TERBIT_SPPT' => 'datetime',
-    'TGL_CETAK_SPPT' => 'datetime'
+    'TGL_CETAK_SPPT' => 'datetime',
+    'NOP' => 'int'
   ];
 
   protected $fillable = [
@@ -132,7 +133,8 @@ class Sppt extends Model
     'STATUS_CETAK_SPPT',
     'TGL_TERBIT_SPPT',
     'TGL_CETAK_SPPT',
-    'NIP_PENCETAK_SPPT'
+    'NIP_PENCETAK_SPPT',
+    'NOP'
   ];
 
   public function pembayaran_sppt()
@@ -746,8 +748,5 @@ class Sppt extends Model
     $denda = (0.02 * $bulan) * $pbb;
     return $denda;
   }
-
-  
-
 
 }

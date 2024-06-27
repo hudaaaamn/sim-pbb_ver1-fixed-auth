@@ -79,14 +79,16 @@ class Pelayanan extends Model
 		return [
 			'ID' => $this->ID,  // Replace "id" with the actual column name
 			'NO_PELAYANAN' => $this->NO_PELAYANAN,
+			'KD_DATI2' => $this->KD_DATI2,
+			'KD_JNS_PELAYANAN' => $this->KD_JNS_PELAYANAN,
 			'NAMA_PEMOHON' => $this->NAMA_PEMOHON,
-			'TANGGAL_PELAYANAN' => $this->TANGGAL_PELAYANAN,
+			'ALAMAT_PEMOHON' => $this->ALAMAT_PEMOHON,
+			'NOP' => $this->NOP,
+			'KETERANGAN' => $this->KETERANGAN,
+			'LETAK_OP' => $this->LETAK_OP,
 			'KECAMATAN' => $this->KECAMATAN,
 			'KELURAHAN' => $this->KELURAHAN,
-			'KD_BLOK' => $this->KD_BLOK,
-			'NO_URUT' => $this->NO_URUT,
-			'KD_JNS_PELAYANAN' => $this->KD_JNS_PELAYANAN,
-			'STATUS_PELAYANAN' => $this->STATUS_PELAYANAN,
+			'TGL_SELESAI' => $this->TGL_SELESAI,
 			'KETERANGAN_BERKAS' => $this->KETERANGAN_BERKAS,
 		];
 	}

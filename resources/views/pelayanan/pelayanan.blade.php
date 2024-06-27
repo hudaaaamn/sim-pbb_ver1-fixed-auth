@@ -40,15 +40,17 @@
                         <tr class="mt-3">
                             <td width="30px">No</td>
                             <td>No Pelayanan</td>
+                            <td>Kode Dati 2</td>
+                            <td>Kode Jenis Pelayanan</td>
                             <td>Nama Pemohon</td>
-                            <td>Tanggal Pelayanan</td>
+                            <td>Alamat Pemohon</td>
+                            <td>NOP</td>
+                            <td>Keterangan</td>
+                            <td>Letak Op</td>
                             <td>Kecamatan</td>
                             <td>Kelurahan</td>
-                            <td>Blok</td>
-                            <td>No Urut</td>
-                            <td>Kode Jenis Pelayanan</td>
-                            <td>Status Pelayanan</td>
-                            <td>Keterangan Berkas</td>
+                            <td>Tanggal Perkiraan Selesai</td>
+                            <td>Lampiran Dokumen</td>
                             <td width="60px" class="text-center">Opsi</td>
                         </tr>
                     </thead>
@@ -76,14 +78,16 @@
             "columns": [
                 { "data": "DT_RowIndex", "orderable": false, "searchable": false },
                 { "data": "NO_PELAYANAN" },
+                { "data": "KD_DATI2" },
+                { "data": "KD_JNS_PELAYANAN" },
                 { "data": "NAMA_PEMOHON" },
-                { "data": "TANGGAL_PELAYANAN" },
+                { "data": "ALAMAT_PEMOHON" },
+                { "data": "NOP" },
+                { "data": "KETERANGAN" },
+                { "data": "LETAK_OP" },
                 { "data": "KECAMATAN" },
                 { "data": "KELURAHAN" },
-                { "data": "KD_BLOK" },
-                { "data": "NO_URUT" },
-                { "data": "KD_JNS_PELAYANAN" },
-                { "data": "STATUS_PELAYANAN" },
+                { "data": "TGL_SELESAI" },
                 { "data": "KETERANGAN_BERKAS" },
                 {
                     "data": null,

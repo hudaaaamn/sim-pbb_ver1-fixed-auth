@@ -31,25 +31,27 @@
 						
                         <div class="row m-5 ">
                             <div class="col-md-6">
-                                <form method="POST" action="{{ route('spop.store') }}" class="row g-4 p-3 needs-validation" novalidate>
+                                <form method="POST" action="{{ route('pelayanan.store',['user' => $data_user->id]) }}" enctype="multipart/form-data" class="row g-4 p-5 needs-validation" novalidate>
+                                    @csrf
+                                    @method('PUT')
                                     <div class="col-md-12">
-                                        <label for="kd_prov" class="form-label">No Pelayanan</label>
-                                        <input type="text" class="form-control" id="kd_prov" name="KD_PROPINSI" required>
+                                        <label for="NO_PELAYANAN" class="form-label">No Pelayanan</label>
+                                        <input type="text" class="form-control" id="NO_PELAYANAN" name="NO_PELAYANAN" value="{{ $data_user->NO_PELAYANAN }}">
                                         <div class="invalid-feedback">
                                             Isi kolom ini terlebih dahulu!
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <label for="kd_dati" class="form-label">Kode Dati 2</label>
-                                        <input type="text" class="form-control" id="kd_dati" name="KD_DATI2" required>
+                                        <label for="KD_DATI2" class="form-label">Kode Dati 2</label>
+                                        <input type="text" class="form-control" id="KD_DATI2" name="KD_DATI2" value="{{ $data_user->KD_DATI2 }}">
                                         <div class="invalid-feedback">
                                             Isi kolom ini terlebih dahulu!
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <label for="kd_kec" class="form-label">Kode Jenis Pelayanan</label>
+                                        <label for="KD_JNS_PELAYANAN" class="form-label">Kode Jenis Pelayanan</label>
                                         <!-- <input type="text" class="form-control" id="kd_jenisTransaksi" name="kd_jenisTransaksi" required> -->
-                                        <select class="form-select" id="kd_kec" name="KD_KECAMATAN" required>
+                                        <select class="form-select" id="KD_JNS_PELAYANAN" name="KD_JNS_PELAYANAN" required>
                                             <option selected disabled value="">Choose...</option>
                                             <option value="1">[010] WAKANDA SELATAN</option>
                                             <option value="2">[020] WAKANDA TIMUR </option>
@@ -60,7 +62,7 @@
                                     </div>
 
                                     <div class="col-md-12">
-                                        <label for="kd_kec" class="form-label">Lampiran Dokumen</label>
+                                        <label for="KETERANGAN_BERKAS" class="form-label">Lampiran Dokumen</label>
                                         <table class="table table-bordered">
                                             <thead>
                                                 <tr>
@@ -168,46 +170,48 @@
                             
 
                             <div class="col-md-6">
-                                <form method="POST" action="{{ route('spop.store') }}" class="row g-4 p-3 needs-validation" novalidate>
+                                <form method="POST" action="{{ route('pelayanan.store',['user' => $data_user->id]) }}" enctype="multipart/form-data" class="row g-4 p-5 needs-validation" novalidate>
+                                    @csrf
+                                    @method('PUT')
                                     <div class="col-md-12">
-                                        <label for="jalan_op" class="form-label">Nama Pemohon</label>
-                                        <input type="text" class="form-control" id="jalan_op" name="JALAN_OP" required>
+                                        <label for="NAMA_PEMOHON" class="form-label">Nama Pemohon</label>
+                                        <input type="text" class="form-control" id="NAMA_PEMOHON" name="NAMA_PEMOHON" value="{{ $data_user->NAMA_PEMOHON }}">
                                         <div class="invalid-feedback">
                                             Isi kolom ini terlebih dahulu!
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <label for="blok_kav" class="form-label">Alamat Pemohon</label>
-                                        <input type="text" class="form-control" id="blok_kav" name="BLOK_KAV_NO_OP" required>
+                                        <label for="ALAMAT_PEMOHON" class="form-label">Alamat Pemohon</label>
+                                        <input type="text" class="form-control" id="ALAMAT_PEMOHON" name="ALAMAT_PEMOHON" value="{{ $data_user->ALAMAT_PEMOHON }}">
                                         <div class="invalid-feedback">
                                             Isi kolom ini terlebih dahulu!
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <label for="rw_op" class="form-label">NOP</label>
-                                        <input type="text" class="form-control" id="blok_kav" name="BLOK_KAV_NO_OP" required>                                        
+                                        <label for="NOP" class="form-label">NOP</label>
+                                        <input type="text" class="form-control" id="NOP" name="NOP" value="{{ $data_user->NOP }}">                                        
                                         <div class="invalid-feedback">
                                             Isi kolom ini terlebih dahulu!
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <label for="rw_op" class="form-label">Keterangan</label>
-                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
+                                        <label for="KETERANGAN" class="form-label">Keterangan</label>
+                                        <textarea class="form-control" id="KETERANGAN" rows="5" value="{{ $data_user->KETERANGAN }}"></textarea>
                                         <div class="invalid-feedback">
                                             Isi kolom ini terlebih dahulu!
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <label for="rt_op" class="form-label">Letak Op</label>
-                                        <input type="text" class="form-control" id="rt_op" name="RT_OP" required>
+                                        <label for="LETAK_OP" class="form-label">Letak Op</label>
+                                        <input type="text" class="form-control" id="LETAK_OP" name="LETAK_OP" value="{{ $data_user->LETAK_OP }}">
                                         <div class="invalid-feedback">
                                             Isi kolom ini terlebih dahulu!
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <label for="kd_statusWp" class="form-label">Kecamatan</label>
+                                        <label for="KECAMATAN" class="form-label">Kecamatan</label>
                                         <!-- <input type="text" class="form-control" id="kd_statusWp" name="kd_statusWp" required> -->
-                                        <select class="form-select" id="kd_statusWp" name="KD_STATUS_WP" required>
+                                        <select class="form-select" id="KECAMATAN" name="KECAMATAN" required>
                                             <option selected disabled value="">Choose...</option>
                                             <option value="1">PEMILIK</option>
                                             <option value="2">PENYEWA</option>
@@ -220,9 +224,9 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <label for="kd_statusWp" class="form-label">Kelurahan</label>
+                                        <label for="KELURAHAN" class="form-label">Kelurahan</label>
                                         <!-- <input type="text" class="form-control" id="kd_statusWp" name="kd_statusWp" required> -->
-                                        <select class="form-select" id="kd_statusWp" name="KD_STATUS_WP" required  disabled>
+                                        <select class="form-select" id="KELURAHAN" name="KELURAHAN" value="{{ $data_user->KELURAHAN }}">
                                             <option selected disabled value="">Choose...</option>
                                             <option value="1">PEMILIK</option>
                                             <option value="2">PENYEWA</option>
@@ -235,15 +239,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12">
-                                        <label for="rw_op" class="form-label">Keterangan</label>
-                                        <textarea class="form-control" id="exampleFormControlTextarea1" rows="5"></textarea>
-                                        <div class="invalid-feedback">
-                                            Isi kolom ini terlebih dahulu!
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <label for="rt_op" class="form-label">Tanggal Perkiraan Selesai</label>
-                                        <input type="text" class="form-control" id="rt_op" name="RT_OP" required>
+                                        <label for="TGL_SELESAI" class="form-label">Tanggal Perkiraan Selesai</label>
+                                        <input type="text" class="form-control" id="TGL_SELESAI" name="TGL_SELESAI" value="{{ $data_user->KELURAHAN }}">
                                         <div class="invalid-feedback">
                                             Isi kolom ini terlebih dahulu!
                                         </div>

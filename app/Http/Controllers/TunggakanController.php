@@ -39,8 +39,8 @@ class TunggakanController extends Controller
             $model_sppt = new Sppt();
             $model_pembayaran = new PembayaranSppt();
 
-            if (isset($post_data['simpbb'])) {
-                $view = 'keuangan.cetak_tunggakan_simpbb';
+            if (isset($post_data['pbb'])) {
+                $view = 'keuangan.cetak_tunggakan_pbb';
                 $model_objek = new Spop();
             } else {
                 $view = 'keuangan.cetak_tunggakan';

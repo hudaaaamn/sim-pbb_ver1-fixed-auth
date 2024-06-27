@@ -51,7 +51,7 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <label for="LAMPIRAN_DOKUMEN" class="form-label">Lampiran Dokumen</label>
+                                <label for="KETERANGAN_BERKAS" class="form-label">Lampiran Dokumen</label>
                                 <table class="table table-bordered">
                                     <thead>
                                         <tr>
@@ -195,36 +195,36 @@
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <label for="KD_KECAMATAN" class="form-label">Kecamatan</label>
-                                <select class="form-select" id="KD_KECAMATAN" name="KD_KECAMATAN" required>
+                                <label for="KECAMATAN" class="form-label">Kecamatan</label>
+                                <select class="form-select" id="KECAMATAN" name="KECAMATAN" required>
                                     <option selected disabled value="">Choose...</option>
-                                    <option value="1">PEMILIK</option>
-                                    <option value="2">PENYEWA</option>
-                                    <option value="3">PENGELOLA</option>
-                                    <option value="4">PEMAKAI</option>
-                                    <option value="5">SENGKETA</option>
+                                    <option value="1">Jagakarsa</option>
+                                    <option value="2">Srengseng</option>
+                                    <option value="3">Sawah</option>
+                                    <option value="4">Depok</option>
+                                    <option value="5">Giwangan</option>
                                 </select>
                                 <div class="invalid-feedback">
                                     Isi kolom ini terlebih dahulu!
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <label for="KD_KELURAHAN" class="form-label">Kelurahan</label>
-                                <select class="form-select" id="KD_KELURAHAN" name="KD_KELURAHAN" required disabled>
+                                <label for="KELURAHAN" class="form-label">Kelurahan</label>
+                                <select class="form-select" id="KELURAHAN" name="KELURAHAN" required>
                                     <option selected disabled value="">Choose...</option>
-                                    <option value="1">PEMILIK</option>
-                                    <option value="2">PENYEWA</option>
-                                    <option value="3">PENGELOLA</option>
-                                    <option value="4">PEMAKAI</option>
-                                    <option value="5">SENGKETA</option>
+                                    <option value="1">Jagakarsa</option>
+                                    <option value="2">Srengseng</option>
+                                    <option value="3">Sawah</option>
+                                    <option value="4">Depok</option>
+                                    <option value="5">Giwangan</option>
                                 </select>
                                 <div class="invalid-feedback">
                                     Isi kolom ini terlebih dahulu!
                                 </div>
                             </div>
                             <div class="col-md-12">
-                                <label for="TANGGAL_PERKIRAAN_SELESAI" class="form-label">Tanggal Perkiraan Selesai</label>
-                                <input type="text" class="form-control" id="TANGGAL_PERKIRAAN_SELESAI" name="TANGGAL_PERKIRAAN_SELESAI" required>
+                                <label for="TGL_SELESAI" class="form-label">Tanggal Perkiraan Selesai</label>
+                                <input type="text" class="form-control" id="TGL_SELESAI" name="TGL_SELESAI" required>
                                 <div class="invalid-feedback">
                                     Isi kolom ini terlebih dahulu!
                                 </div>
@@ -239,32 +239,42 @@
         </div>
     </div>
 </div>
+    <div class="toast-container position-fixed bottom-0 end-0 p-3">
+        <div id="toast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+                <strong class="me-auto">Bootstrap</strong>
+                <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+            </div>
+            <div class="toast-body">
+                Data telah berhasil disimpan!
+            </div>
+        </div>
+    </div>
+    
 
-<!-- JavaScript -->
-<script>
-    document.getElementById('addDataForm').addEventListener('submit', function(e) {
-        e.preventDefault();
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const toastElement = document.getElementById('toast');
+            const toast = new bootstrap.Toast(toastElement);
 
-        const formData = new FormData(this);
+            // Example of showing toast after form submission
+            document.querySelector('form').addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent default form submission
 
-        fetch('/api/pelayanan', {
-            method: 'POST',
-            body: formData,
-            headers: {
-                'Accept': 'application/json',
-            },
-        })
-        .then(response => response.json())
-        .then(data => {
-            if (data.success) {
-                alert('Data berhasil ditambahkan');
-                // Redirect to the pelayanan index page or refresh the page to show new data
-                window.location.href = '/pelayanan';
-            } else {
-                alert('Gagal menambahkan data: ' + data.error);
-            }
-        })
-        .catch(error => console.error('Error:', error));
-    });
-</script>
+                // Assuming an AJAX call to submit the form
+                fetch("{{ route('pelayanan.store') }}", {
+                    method: 'POST',
+                    body: new FormData(this),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        toast.show();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
+        });
+    </script>
+</div>
 @endsection

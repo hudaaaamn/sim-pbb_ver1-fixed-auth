@@ -16,7 +16,7 @@
                     <div class="p-0 d-flex align-items-start" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
                         <ol class="breadcrumb">
                             <li class="breadcrumb-item"><a href="#">Beranda</a></li>
-                            <li class="breadcrumb-item"><a href="#">Laporan</a></li>
+                            <li class="breadcrumb-item"><a href="#">Dokumen</a></li>
                             <li class="breadcrumb-item"><a href="{{ route('spop.index') }}">SPOP</a></li>
                             <li class="breadcrumb-item active" aria-current="page">Tambah Data SPOP</li>
                         </ol>
@@ -161,17 +161,31 @@
             </div>
         </div>
     </div>
+    
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             const toastElement = document.getElementById('toast');
             const toast = new bootstrap.Toast(toastElement);
 
-            function showToast() {
-                toast.show();
-            }
+            // Example of showing toast after form submission
+            document.querySelector('form').addEventListener('submit', function (event) {
+                event.preventDefault(); // Prevent default form submission
+
+                // Assuming an AJAX call to submit the form
+                fetch("{{ route('spop.store') }}", {
+                    method: 'POST',
+                    body: new FormData(this),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data.success) {
+                        toast.show();
+                    }
+                })
+                .catch(error => console.error('Error:', error));
+            });
         });
     </script>
 </div>
-
 @endsection

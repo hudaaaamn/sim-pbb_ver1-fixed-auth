@@ -1,5 +1,5 @@
 @extends('kerangka.master')
-@section('title', 'Tambah Data SPOP')
+@section('title', 'SPOP')
 @section('content')
 
 <div class="bgn">
@@ -52,15 +52,15 @@
                             @csrf
                             <div class="col-md-4">
                                 <label for="jns_transaksi" class="form-label">Jenis Transaksi</label>
-                                <input type="text" class="form-control" id="jns_transaksi" name="JNS_TRANSAKSI" value="{{ $spopData->JNS_TRANSAKSI }} Pendaftaran Baru" readonly>
+                                <input type="text" class="form-control" id="jns_transaksi" name="JNS_TRANSAKSI" value="{{ $spopData->jenis_transaksi }} " readonly>
                             </div>
                             <div class="col-md-4">
                                 <label for="nop" class="form-label">NOP</label>
-                                <input type="text" class="form-control nop" id="nop" name="nop" value="{{ $spopData->NOP }}33.12.020.001.002" readonly>
+                                <input type="text" class="form-control nop" id="nop" name="nop" value="{{ $spopData->nop }} " readonly>
                             </div>
                             <div class="col-md-4">
                                 <label for="nop_bersama" class="form-label">NOP Bersama</label>
-                                <input type="text" class="form-control nop" id="nop_bersama" name="NOP_BERSAMA" value="{{ $spopData->NOP_BERSAMA }}33.12.020.001.010" readonly>
+                                <input type="text" class="form-control nop" id="nop_bersama" name="NOP_BERSAMA" value="{{ $spopData->nop_bersama }}" readonly>
                             </div>
                         </form>
                     </div>
@@ -71,11 +71,11 @@
                             @csrf
                             <div class="col-md-4">
                                 <label for="nop_asal" class="form-label">NOP Asal</label>
-                                <input type="text" class="form-control nop" id="nop_asal" name="NOP_ASAL" value="{{ $spopData->NOP_ASAL }} 22.08.040.004.032" readonly>
+                                <input type="text" class="form-control nop" id="nop_asal" name="NOP_ASAL" value="{{ $spopData->nop_asal }} " readonly>
                             </div>
                             <div class="col-md-4">
                                 <label for="no_sppt_lama" class="form-label">NO SPPT Lama</label>
-                                <input type="text" class="form-control nop" id="no_sppt_lama" name="NO_SPPT_LAMA" value="{{ $spopData->NO_SPPT_LAMA }}325367545" readonly>
+                                <input type="text" class="form-control nop" id="no_sppt_lama" name="NO_SPPT_LAMA" value="{{ $spopData->no_sppt_lama }} " readonly>
                             </div>
                         </form>
                     </div>
@@ -86,30 +86,30 @@
                             @csrf
                             <div class="col-md-4">
                                 <label for="jalan" class="form-label">Jalan</label>
-                                <input type="text" class="form-control" id="jalan" name="JALAN" value="{{ $spopData->JALAN }}Jl. Kesatuan" readonly>
+                                <input type="text" class="form-control" id="jalan" name="JALAN" value="{{ $spopData->jalan }}" readonly>
                             </div>
                             <div class="col-md-1">
                                 <label for="rt" class="form-label">RT</label>
-                                <input type="text" class="form-control" id="rt" name="RT" value="{{ $spopData->RT }}004" readonly>
+                                <input type="text" class="form-control" id="rt" name="RT" value="{{ $spopData->rt }}" readonly>
                             </div>
                             <div class="col-md-1">
                                 <label for="rw" class="form-label">RW</label>
-                                <input type="text" class="form-control" id="rw" name="RW" value="{{ $spopData->RW }}007" readonly>
+                                <input type="text" class="form-control" id="rw" name="RW" value="{{ $spopData->rw }}" readonly>
                             </div>
                             <div class="col-md-1">
                                 <label for="no" class="form-label">No</label>
-                                <input type="text" class="form-control" id="no" name="NO" value="{{ $spopData->NO }}48" readonly>
+                                <input type="text" class="form-control" id="no" name="NO" value="{{ $spopData->no }}" readonly>
                             </div>
 
                             <div class="col-md-5"></div>
 
                             <div class="col-md-4">
                                 <label for="kelurahan" class="form-label">Kelurahan</label>
-                                <input type="text" class="form-control" id="kelurahan" name="KELURAHAN" value="{{ $spopData->KELURAHAN }} Jagakarsa" readonly>
+                                <input type="text" class="form-control" id="kelurahan" name="KELURAHAN" value="{{ $spopData->kelurahan }} " readonly>
                             </div>
                             <div class="col-md-3">
                                 <label for="no_legalitas" class="form-label">Nomor Legalitas</label>
-                                <input type="text" class="form-control" id="no_legalitas" name="NO_LEGALITAS" value="{{ $spopData->NO_LEGALITAS }}904637243" readonly>
+                                <input type="text" class="form-control" id="no_legalitas" name="NO_LEGALITAS" value="{{ $spopData->nomor_legalitas }}" readonly>
                             </div>
                         </form>
                     </div>
@@ -120,32 +120,32 @@
                             @csrf
                             <div class="col-md-4">
                                 <label for="nik" class="form-label">NIK</label>
-                                <input type="text" class="form-control" id="nik" name="NIK" value="{{ $spopData->NIK }} 3174092107000004" readonly>
+                                <input type="text" class="form-control" id="nik" name="NIK" value="{{ $spopData->nik }}" readonly>
                             </div>
                             <div class="col-md-4">
                                 <label for="nama" class="form-label">Nama</label>
-                                <input type="text" class="form-control" id="nama" name="NAMA" value="{{ $spopData->NAMA }} Muhammad Rama" readonly>
+                                <input type="text" class="form-control" id="nama" name="NAMA" value="{{ $spopData->nama }} " readonly>
                             </div>
                             <div class="col-md-4">
                                 <label for="npwp" class="form-label">NPWP</label>
-                                <input type="text" class="form-control" id="npwp" name="NPWP" value="{{ $spopData->NPWP }}01.234.567.8" readonly>
+                                <input type="text" class="form-control" id="npwp" name="NPWP" value="{{ $spopData->npwp }} " readonly>
                             </div>
 
                             <div class="col-md-4">
                                 <label for="alamat" class="form-label">Alamat</label>
-                                <input type="text" class="form-control" id="alamat" name="ALAMAT" value="{{ $spopData->ALAMAT }}Jl. Kesatuan no.48" readonly>
+                                <input type="text" class="form-control" id="alamat" name="ALAMAT" value="{{ $spopData->alamat }} " readonly>
                             </div>
                             <div class="col-md-1">
                                 <label for="rw" class="form-label">RW</label>
-                                <input type="text" class="form-control" id="rw" name="RW" value="{{ $spopData->RW }}007" readonly>
+                                <input type="text" class="form-control" id="rw" name="RW" value="{{ $spopData->rw_alamat }}" readonly>
                             </div>
                             <div class="col-md-1">
                                 <label for="rt" class="form-label">RT</label>
-                                <input type="text" class="form-control" id="rt" name="RT" value="{{ $spopData->RT }}004" readonly>
+                                <input type="text" class="form-control" id="rt" name="RT" value="{{ $spopData->rt_alamat }}" readonly>
                             </div>
                             <div class="col-md-2">
                                 <label for="kodepos" class="form-label">Kode Pos</label>
-                                <input type="text" class="form-control" id="kodepos" name="KODEPOS" value="{{ $spopData->KODEPOS }}12640" readonly>
+                                <input type="text" class="form-control" id="kodepos" name="KODEPOS" value="{{ $spopData->kode_pos }}" readonly>
                             </div>
                         </form>
                     </div>

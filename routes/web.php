@@ -23,6 +23,7 @@ use App\Http\Controllers\TarifController;
 use App\Http\Controllers\TunggakanController;
 use App\Http\Controllers\ValidasiController;
 use App\Http\Controllers\HomeController;
+use App\Http\Controllers\InformasiPBBController;
 
 /*
 |--------------------------------------------------------------------------
@@ -50,6 +51,9 @@ Route::resource('lspop', LspopController::class)->except([
 
 Route::get('/lspop/detail/{lspop}', [LspopController::class, 'show'])->name('lspop.show');
 Route::get('/lspop-data', [LspopController::class, 'data'])->name('lspop.data');
+Route::post('/lspop/search', [LspopController::class, 'search'])->name('lspop.search');
+
+
 
 Route::resource('spop', SpopController::class)->except([
     'show'  // Menggunakan rute khusus untuk 'show'
@@ -78,6 +82,9 @@ Route::get('/pelayanan-laporan', [PelayananController::class, 'laporan'])->name(
 Route::get('/pelayanan/edit/{ID}', [PelayananController::class, 'edit'])->name('pelayanan.edit');
 Route::get('/pelayanan-data', [PelayananController::class, 'data'])->name('pelayanan.data');
 Route::post('/pelayanan/export_excel', [PelayananController::class, 'export'])->name('pelayanan.excel');
+Route::get('/pelayanan/create', [PelayananController::class, 'create'])->name('pelayanan.create');
+Route::post('/pelayanan/store', [PelayananController::class, 'store'])->name('pelayanan.store');
+
 
 Route::resource('user', UserController::class);
 
@@ -161,12 +168,12 @@ Route::controller(TarifController::class)->group(function () {
 
 Route::get('/home', [HomeController::class, 'index'])->name('home');
 
-// Rute untuk pembuatan SPOP baru
-Route::get('/spop/create', [SpopController::class, 'create'])->name('spop.create');
+// // Rute untuk pembuatan SPOP baru
+// Route::get('/spop/create', [SpopController::class, 'create'])->name('spop.create');
 
-// Rute untuk pencarian SPOP berdasarkan NOP
-Route::get('/spop/search', [SpopController::class, 'search'])->name('spop.search');
+// // Rute untuk pencarian SPOP berdasarkan NOP
+// Route::get('/spop/search', [SpopController::class, 'search'])->name('spop.search');
 
-Route::post('/spop/store', [SpopController::class, 'store'])->name('spop.store');
+// Route::post('/spop/store', [SpopController::class, 'store'])->name('spop.store');
 
-Route::get('/test', [LspopController::class, 'test'])->name('test');
+// Route::get('/test', [LspopController::class, 'test'])->name('test');

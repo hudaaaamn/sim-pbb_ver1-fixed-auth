@@ -158,22 +158,23 @@ class PelayananController extends Controller
 
     public function index()
     {
+    
         $data_user = DB::table('users');
         $user = $data_user->where('id', Auth()->user()->id)->first();
         $fullname = $user->fullname;
         $username = $user->username;
 
-        $response = Http::withHeaders([
-            "Authorization" => "Bearer " . "10|Q2ER3GcZ0RlDfZxk8EpO0xQQlWPxcqJLndJ1Yb821f928d1f"
-        ])->get(env("API_URL") . "/pelayanan");
+        // $response = Http::withHeaders([
+        //     "Authorization" => "Bearer " . "21|pViTyEasFDRUZxCriLVHUFtEqh1dlnIVFunewpaI99df61ed"
+        // ])->get(env("API_URL") . "/pelayanan");
 
-        if($response->successful()) {
-            $data_pelayanan = $response->json()['data']['data']; // Ambil data di dalam key 'data'
-        } else {
-            $data_pelayanan = [];
-        }
+        // if($response->successful()) {
+        //     $data_pelayanan = $response->json()['data']['data']; // Ambil data di dalam key 'data'
+        // } else {
+        //     $data_pelayanan = [];
+        // }
 
-        return view('pelayanan.pelayanan', compact('fullname', 'username', 'data_pelayanan'));
+        return view('pelayanan.pelayanan', compact('fullname', 'username'));
     }
 
 
@@ -193,14 +194,16 @@ class PelayananController extends Controller
             $query->where(function ($query) use ($searchValue) {
                 // Adjust column names as per your database schema
                 $query->orWhere('NO_PELAYANAN', 'like', "%$searchValue%")
+                    ->orWhere('KD_DATI2', 'like', "%$searchValue%")
+                    ->orWhere('KD_JNS_PELAYANAN', 'like', "%$searchValue%")
                     ->orWhere('NAMA_PEMOHON', 'like', "%$searchValue%")
-                    ->orWhere('TANGGAL_PELAYANAN', 'like', "%$searchValue%")
+                    ->orWhere('ALAMAT_PEMOHON', 'like', "%$searchValue%")
+                    ->orWhere('NOP', 'like', "%$searchValue%")
+                    ->orWhere('KETERANGAN', 'like', "%$searchValue%")
+                    ->orWhere('LETAK_OP', 'like', "%$searchValue%")
                     ->orWhere('KECAMATAN', 'like', "%$searchValue%")
                     ->orWhere('KELURAHAN', 'like', "%$searchValue%")
-                    ->orWhere('KD_BLOK', 'like', "%$searchValue%")
-                    ->orWhere('NO_URUT', 'like', "%$searchValue%")
-                    ->orWhere('KD_JNS_PELAYANAN', 'like', "%$searchValue%")
-                    ->orWhere('STATUS_PELAYANAN', 'like', "%$searchValue%")
+                    ->orWhere('TGL_SELESAI', 'like', "%$searchValue%")
                     ->orWhere('KETERANGAN_BERKAS', 'like', "%$searchValue%");
             });
         }
@@ -227,53 +230,96 @@ class PelayananController extends Controller
     public function create()
     {
         $data_user = DB::table('users');
-        $user = $data_user->where('id', Auth()->user()->id)->first();
+        $user = $data_user->where('id', Auth::user()->id)->first();
         $fullname = $user->fullname;
         $username = $user->username;
 
-
-        return (view('pelayanan.add_pelayanan', compact('fullname', 'username')));
+        return view('pelayanan.add_pelayanan', compact('fullname', 'username'));
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created Pelayanan in storage.
      */
     public function store(Request $request)
     {
-        $model = new Pelayanan();
-        $dok_pelayanan = \app\models\RefDokumenPelayanan::find()->asArray()->all();
+        $request->validate([
+            'NO_PELAYANAN' => 'required',
+            'KD_DATI2' => 'required',
+            'KD_JNS_PELAYANAN' => 'required',
+            'NAMA_PEMOHON' => 'required',
+            'ALAMAT_PEMOHON' => 'required',
+            'NOP' => 'required',
+            'KETERANGAN' => 'required',
+            'LETAK_OP' => 'required',
+            'KECAMATAN' => 'required',
+            'KELURAHAN' => 'required',
+            'TGL_SELESAI' => 'required',
+            'KETERANGAN_BERKAS' => 'nullable',
+        ]);
 
-        if (request()->post()) {
+        $data_pelayanan = new Pelayanan();
+        $data_pelayanan->NO_PELAYANAN = $request->NO_PELAYANAN;
+        $data_pelayanan->KD_DATI2 = $request->KD_DATI2;
+        $data_pelayanan->KD_JNS_PELAYANAN = $request->KD_JNS_PELAYANAN;
+        $data_pelayanan->NAMA_PEMOHON = $request->NAMA_PEMOHON;
+        $data_pelayanan->ALAMAT_PEMOHON = $request->ALAMAT_PEMOHON;
+        $data_pelayanan->NOP = $request->NOP;
+        $data_pelayanan->KETERANGAN = $request->KETERANGAN;
+        $data_pelayanan->LETAK_OP = $request->LETAK_OP;
+        $data_pelayanan->KECAMATAN = $request->KECAMATAN;
+        $data_pelayanan->KELURAHAN = $request->KELURAHAN;
+        $data_pelayanan->TGL_SELESAI = $request->TGL_SELESAI;
+        $data_pelayanan->KETERANGAN_BERKAS = $request->KETERANGAN_BERKAS;
+        
+        return redirect()->route('pelayanan.index')->with('success', 'Data pelayanan berhasil ditambahkan');
 
-            $p = request()->post();
-            $nop = explode('.', $p['nop']);
+        //     $nop = explode('.', $request->input('NOP'));
 
-            $model->KD_PROPINSI = $nop[0];
-            $model->KD_DATI2 = $nop[1];
-            $model->KD_KECAMATAN = $nop[2];
-            $model->KD_KELURAHAN = $nop[3];
-            $model->KD_BLOK = $nop[4];
-            $model->NO_URUT = $nop[5];
-            $model->KD_JNS_OP = $nop[6];
-            // echo($p['Pelayanan']['KECAMATAN']);exit;
-            $m_kec = \app\models\RefKecamatan::find()->where(['KD_KECAMATAN' => $p['Pelayanan']['KECAMATAN']])->one();
-            $m_kel = \app\models\RefKelurahan::find()->where(['KD_KECAMATAN' => $p['Pelayanan']['KECAMATAN'], 'KD_KELURAHAN' => $p['Pelayanan']['KELURAHAN']])->one();
+        //     $pelayanan = new Pelayanan();
+        //     $pelayanan->KD_PROPINSI = $nop[0];
+        //     $pelayanan->KD_DATI2 = $nop[1];
+        //     $pelayanan->KD_KECAMATAN = $nop[2];
+        //     $pelayanan->KD_KELURAHAN = $nop[3];
+        //     $pelayanan->KD_BLOK = $nop[4];
+        //     $pelayanan->NO_URUT = $nop[5];
+        //     $pelayanan->KD_JNS_OP = $nop[6];
 
-            $model->KECAMATAN = $m_kec->NM_KECAMATAN;
-            $model->KELURAHAN = $m_kel->NM_KELURAHAN;
-            $model->save();
-            foreach ($p['pelayanan_dokumen'] as $key => $value) {
-                $m_dok = new \app\models\PelayananDokumen();
-                $m_dok->pelayanan_id = $model->ID;
-                $m_dok->dokumen_id = $key;
-                $m_dok->save();
-            }
-            return $this->redirect(['pelayanan.pelayanan', 'id' => $model->ID]);
-        } else {
-            $model->TANGGAL_PELAYANAN = date('Y-m-d');
-            $model->NO_PELAYANAN =  $model->getNoPelayanan();
-            return $this->render('pelayanan.add_pelayanan', compact('model', 'dok_pelayanan'));
-        };
+        //     $m_kec = \App\Models\RefKecamatan::where('KD_KECAMATAN', $request->input('KECAMATAN'))->first();
+        //     $m_kel = \App\Models\RefKelurahan::where([
+        //         'KD_KECAMATAN' => $request->input('KECAMATAN'),
+        //         'KD_KELURAHAN' => $request->input('KELURAHAN')
+        //     ])->first();
+
+        //     $pelayanan->KECAMATAN = $m_kec->NM_KECAMATAN;
+        //     $pelayanan->KELURAHAN = $m_kel->NM_KELURAHAN;
+        //     $pelayanan->TANGGAL_PELAYANAN = date('Y-m-d');
+        //     $pelayanan->NO_PELAYANAN = $pelayanan->getNoPelayanan();
+        //     $pelayanan->fill($request->all());
+        //     $pelayanan->save();
+
+        //     foreach ($request->input('pelayanan_dokumen') as $key => $value) {
+        //         $m_dok = new \App\Models\PelayananDokumen();
+        //         $m_dok->pelayanan_id = $pelayanan->ID;
+        //         $m_dok->dokumen_id = $key;
+        //         $m_dok->save();
+        //     }
+
+        //     return response()->json([
+        //         'success' => true,
+        //         'data' => $pelayanan
+        //     ], 200);
+
+        // } catch (ValidationException $e) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'error' => $e->getMessage()
+        //     ], 500);
+        // } catch (Exception $e) {
+        //     return response()->json([
+        //         'success' => false,
+        //         'error' => "Internal server error: " . $e->getMessage()
+        //     ], 500);
+        // }
     }
 
     public function laporan()
@@ -312,16 +358,84 @@ class PelayananController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit($ID)
+    public function edit($NO_PELAYANAN, $KD_DATI2, $KD_JNS_PELAYANAN, $NAMA_PEMOHON, $ALAMAT_PEMOHON, $NOP, $KETERANGAN, $LETAK_OP, $KECAMATAN, $KELURAHAN, $TGL_SELESAI, $KETERANGAN_BERKAS)
     {
         $data_user = DB::table('users');
         $user = $data_user->where('id', Auth()->user()->id)->first();
         $fullname = $user->fullname;
         $username = $user->username;
-
-        return (view('pelayanan.edit_pelayanan', compact('fullname', 'username')));
+        $result = Pelayanan::all()->first(function ($item) use ($NO_PELAYANAN, $KD_DATI2, $KD_JNS_PELAYANAN, $NAMA_PEMOHON, $ALAMAT_PEMOHON, $NOP, $KETERANGAN, $LETAK_OP, $KECAMATAN, $KELURAHAN, $TGL_SELESAI, $KETERANGAN_BERKAS) {
+            return $item->NO_PELAYANAN == $NO_PELAYANAN &&
+                $item->KD_DATI2 == $KD_DATI2 &&
+                $item->KD_JNS_PELAYANAN == $KD_JNS_PELAYANAN &&
+                $item->NAMA_PEMOHON == $NAMA_PEMOHON &&
+                $item->ALAMAT_PEMOHON == $ALAMAT_PEMOHON &&
+                $item->NOP == $NOP &&
+                $item->KETERANGAN == $KETERANGAN &&
+                $item->LETAK_OP == $LETAK_OP &&
+                $item->KECAMATAN == $KECAMATAN &&
+                $item->KELURAHAN == $KELURAHAN &&
+                $item->TGL_SELESAI == $TGL_SELESAI &&
+                $item->KETERANGAN_BERKAS == $KETERANGAN_BERKAS;
+        });
+        return view('pelayanan.edit_pelayanan', compact('fullname', 'username', 'result'));
     }
 
+    public function update(Request $request)
+    {
+        $request->validate([
+            'NO_PELAYANAN' => 'required',
+            'KD_DATI2' => 'required',
+            'KD_JNS_PELAYANAN' => 'required',
+            'NAMA_PEMOHON' => 'required',
+            'ALAMAT_PEMOHON' => 'required',
+            'NOP' => 'required',
+            'KETERANGAN' => 'required',
+            'LETAK_OP' => 'required',
+            'KECAMATAN' => 'required',
+            'KELURAHAN' => 'required',
+            'TGL_SELESAI' => 'required',
+            'KETERANGAN_BERKAS' => 'nullable',
+        ]);
+
+        $data_pelayanan = Pelayanan::where([
+            ['NO_PELAYANAN', '=', $request->NO_PELAYANAN],
+            ['KD_DATI2', '=', $request->KD_DATI2],
+            ['KD_JNS_PELAYANAN', '=', $request->KD_JNS_PELAYANAN],
+            ['NAMA_PEMOHON', '=', $request->NAMA_PEMOHON],
+            ['ALAMAT_PEMOHON', '=', $request->ALAMAT_PEMOHON],
+            ['NOP', '=', $request->NOP],
+            ['KETERANGAN', '=', $request->KETERANGAN],
+            ['LETAK_OP', '=', $request->LETAK_OP],
+            ['KECAMATAN', '=', $request->KECAMATAN],
+            ['KELURAHAN', '=', $request->KELURAHAN],
+            ['TGL_SELESAI', '=', $request->TGL_SELESAI],
+            ['KETERANGAN_BERKAS', '=', $request->KETERANGAN_BERKAS],
+        ])->first();
+
+        if ($data_pelayanan) {
+            // Update the record with the new values
+            $data_pelayanan->update([
+                'LETAK_OP' => $request->LETAK_OP,
+                'TGL_SELESAI' => $request->TGL_SELESAI,
+            ]);
+            return redirect()->route('pelayanan.index');
+        }
+        // $id = $pelayanan;
+        // $pelayanan = Pelayanan::find($id);
+
+        // if (!$pelayanan) {
+        //     // Handle the case where the model is not found
+        //     abort(404);
+        // }
+
+        // if ($pelayanan->fill(request()->all())->save()) {
+        //     return redirect()->route('pelayanan.index', ['id' => $pelayanan->id])->with('success', 'Data berhasil disimpan');
+        //     // Replace 'your.route.name' with the actual name of the route you want to redirect to
+        // }
+
+        // return view('pelayanan.edit_pelayanan', ['pelayanan' => $pelayanan]);
+    }
     /**
      * Update the specified resource in storage.
      */
